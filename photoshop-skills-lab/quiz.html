@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quiz · Photoshop Skills Lab</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <header class="page-hero">
+    <div class="blob b2"></div><div class="blob b3"></div>
+    <div class="container">
+      <span class="emoji">🏆</span>
+      <h1>Test <span class="grad-text">Yourself</span></h1>
+      <p class="muted" style="max-width:640px;margin:0 auto">Two games: a multiple-choice quiz and a shortcut-key speed challenge. Level 2 mode adds harder questions.</p>
+      <div class="chips" style="margin-top:22px">
+        <button class="chip on" data-mode="quiz">📝 Quiz</button>
+        <button class="chip" data-mode="keys">⌨️ Shortcut Sprint</button>
+      </div>
+    </div>
+  </header>
+
+  <section class="container" style="padding-top:10px">
+    <!-- MULTIPLE CHOICE -->
+    <div class="quiz-card" id="quiz">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <span class="pill" id="q-count"></span><span class="pill" id="q-score"></span>
+      </div>
+      <div class="progress-wrap" style="height:10px;margin:14px 0"><div class="progress-fill" id="q-bar"></div></div>
+      <h2 id="q-text" style="font-size:1.5rem"></h2>
+      <div class="quiz-opts" id="q-opts"></div>
+      <div id="q-feedback"></div>
+      <div style="text-align:right"><button class="btn btn-primary" id="q-next" style="display:none">Next →</button></div>
+    </div>
+
+    <!-- SHORTCUT SPRINT -->
+    <div class="quiz-card center" id="keys" style="display:none">
+      <p class="muted">Press the shortcut key for the tool shown. You have <strong>30 seconds</strong>!</p>
+      <div style="display:flex;justify-content:center;gap:12px"><span class="pill" id="k-time">⏱ 30s</span><span class="pill" id="k-score">Score 0</span><span class="pill" id="k-best"></span></div>
+      <div class="big-key" id="k-icon">⌨️</div>
+      <h2 id="k-name">Ready?</h2>
+      <div id="k-feedback" style="min-height:30px"></div>
+      <button class="btn btn-primary" id="k-start">▶ Start</button>
+    </div>
+    <div style="text-align:center;margin-top:30px"><button class="btn learn-btn" data-id="quiz">Mark as learnt</button></div>
+  </section>
+
+  <script src="js/main.js"></script>
+  <script>
+    const $ = id => document.getElementById(id);
+
+    /* ===== QUESTIONS – add your own! (l2: true = Level 2 only) ===== */
+    const QUESTIONS = [
+      { q: 'Which tool copies pixels from one area and paints them in another?', a: ['Clone Stamp', 'Eraser', 'Magic Wand', 'Crop'], c: 0, why: 'Alt+click to set the source, then paint.' },
+      { q: 'What is the shortcut for the Brush tool?', a: ['R', 'B', 'P', 'H'], c: 1, why: 'B for Brush (P is the Pen).' },
+      { q: 'Which file type keeps all your layers?', a: ['JPG', 'PNG', 'PSD', 'GIF'], c: 2, why: 'Always save your working file as a PSD.' },
+      { q: 'Which lasso is best for selecting a building with straight edges?', a: ['Freehand Lasso', 'Polygonal Lasso', 'Magic Eraser', 'Spot Healing'], c: 1, why: 'Click from corner to corner for straight lines.' },
+      { q: 'An opacity of 0% means the layer is…', a: ['Fully solid', 'Half see-through', 'Invisible', 'Black & white'], c: 2, why: '100% = solid, 0% = completely see-through.' },
+      { q: 'What does Ctrl+T do?', a: ['New text', 'Free Transform', 'Trim', 'Toggle layers'], c: 1, why: 'Free Transform lets you resize, rotate and distort.' },
+      { q: 'The grey and white checkerboard pattern means…', a: ['The image is broken', 'Transparent pixels', 'A filter is on', 'Low resolution'], c: 1, why: 'Checkerboard = nothing there (transparency).' },
+      { q: 'What resolution should you use for printing?', a: ['72 ppi', '150 ppi', '300 ppi', '1000 ppi'], c: 2, why: '300 ppi is standard for print; 72 ppi for screens.' },
+      { q: 'Which colour mode is used for screens?', a: ['CMYK', 'RGB', 'Grayscale', 'Pantone'], c: 1, why: 'RGB for screen, CMYK for print.' },
+      { q: 'On a layer mask, painting BLACK will…', a: ['Show the layer', 'Hide the layer', 'Delete the layer', 'Change its colour'], c: 1, why: 'Black conceals, white reveals.' },
+      { q: 'Which tool automatically removes small spots and marks?', a: ['Spot Healing Brush', 'Dodge', 'Paint Bucket', 'Move'], c: 0, why: 'Just paint over the blemish.' },
+      { q: 'Magic Wand Tolerance at a HIGH number will…', a: ['Select fewer colours', 'Select more colours', 'Blur the selection', 'Do nothing'], c: 1, why: 'High tolerance accepts more different colours.' },
+      { q: 'How do you deselect?', a: ['Ctrl+D', 'Ctrl+Z', 'Esc+S', 'Ctrl+E'], c: 0, why: 'Ctrl+D (Cmd+D on Mac).' },
+      { q: 'Which tool makes areas LIGHTER?', a: ['Burn', 'Dodge', 'Sponge', 'Smudge'], c: 1, why: 'Dodge lightens, Burn darkens.' },
+      { q: 'Why use an Adjustment Layer instead of Image › Adjustments?', a: ['It is faster', 'It is non-destructive', 'It makes the file smaller', 'It adds a filter'], c: 1, why: 'You can re-edit or remove it any time without harming the photo.', l2: true },
+      { q: 'What does Flow control on a brush?', a: ['Brush size', 'How quickly paint builds up', 'Edge softness', 'Brush angle'], c: 1, why: 'Opacity caps a stroke; Flow is how fast it builds.', l2: true },
+      { q: 'Which blend mode makes white disappear?', a: ['Screen', 'Multiply', 'Difference', 'Normal'], c: 1, why: 'Multiply hides white – Screen hides black.', l2: true },
+      { q: 'What must you do to a layer to use Smart Filters?', a: ['Rasterise it', 'Convert to Smart Object', 'Lock it', 'Merge it'], c: 1, why: 'Smart Filters stay editable on a Smart Object.', l2: true },
+      { q: 'Alt+clicking between two layers creates a…', a: ['Layer group', 'Clipping mask', 'New layer', 'Merge'], c: 1, why: 'The top layer only shows inside the layer below.', l2: true }
+    ];
+
+    let qs = [], qi = 0, score = 0;
+    const shuffle = a => a.map(v => [Math.random(), v]).sort((x, y) => x[0] - y[0]).map(x => x[1]);
+    function startQuiz() {
+      const lvl = document.body.dataset.level;
+      qs = shuffle(QUESTIONS.filter(q => lvl === '2' || !q.l2)).slice(0, 10);
+      qi = 0; score = 0; showQ();
+    }
+    function showQ() {
+      const q = qs[qi];
+      $('q-count').textContent = `Question ${qi + 1} of ${qs.length}`;
+      $('q-score').textContent = `Score ${score}`;
+      $('q-bar').style.width = (qi / qs.length * 100) + '%';
+      $('q-text').textContent = q.q;
+      $('q-feedback').innerHTML = ''; $('q-next').style.display = 'none';
+      $('q-opts').innerHTML = q.a.map((t, i) => `<button data-i="${i}">${String.fromCharCode(65 + i)}. ${t}</button>`).join('');
+      $('q-opts').querySelectorAll('button').forEach(b => b.onclick = () => answer(+b.dataset.i));
+    }
+    function answer(i) {
+      const q = qs[qi], btns = $('q-opts').querySelectorAll('button');
+      btns.forEach(b => b.disabled = true);
+      btns[q.c].classList.add('right');
+      if (i === q.c) { score++; $('q-feedback').innerHTML = `<div class="box tip"><strong>✅ Correct!</strong>${q.why}</div>`; }
+      else { btns[i].classList.add('wrong'); $('q-feedback').innerHTML = `<div class="box warn"><strong>❌ Not quite</strong>${q.why}</div>`; }
+      $('q-score').textContent = `Score ${score}`;
+      $('q-next').style.display = 'inline-flex';
+      $('q-next').textContent = qi === qs.length - 1 ? 'See results 🏁' : 'Next →';
+    }
+    $('q-next').onclick = () => { qi++; qi < qs.length ? showQ() : results(); };
+    function results() {
+      $('q-bar').style.width = '100%';
+      const pct = Math.round(score / qs.length * 100);
+      const msg = pct >= 80 ? '🌟 Photoshop pro!' : pct >= 50 ? '👍 Good work – revise the ones you missed.' : '📚 Keep practising – revisit the Tools page.';
+      $('q-text').textContent = `You scored ${score} / ${qs.length} (${pct}%)`;
+      $('q-opts').innerHTML = `<p style="font-size:1.2rem">${msg}</p>`;
+      $('q-feedback').innerHTML = '';
+      $('q-next').textContent = '↺ Try again'; $('q-next').onclick = () => { $('q-next').onclick = () => { qi++; qi < qs.length ? showQ() : results(); }; startQuiz(); };
+      if (pct >= 80) confetti(140);
+    }
+
+    /* ===== SHORTCUT SPRINT ===== */
+    const KEYS = [['🖌️', 'Brush', 'b'], ['🧽', 'Eraser', 'e'], ['✥', 'Move', 'v'], ['⬚', 'Marquee', 'm'], ['➰', 'Lasso', 'l'], ['🪄', 'Magic Wand / Quick Selection', 'w'],
+      ['⛶', 'Crop', 'c'], ['💧', 'Eyedropper', 'i'], ['🧬', 'Clone Stamp', 's'], ['🩹', 'Spot Healing', 'j'], ['🅃', 'Type', 't'], ['⬟', 'Shape', 'u'],
+      ['✒️', 'Pen', 'p'], ['🔍', 'Zoom', 'z'], ['✋', 'Hand', 'h'], ['🌗', 'Dodge / Burn', 'o'], ['🌈', 'Gradient / Paint Bucket', 'g'], ['⇄', 'Swap colours', 'x'], ['⬛', 'Reset colours', 'd']];
+    let kTimer = null, kScore = 0, kCur = null, kLeft = 30;
+    const best = () => { try { return +localStorage.getItem('psBest') || 0; } catch { return 0; } };
+    $('k-best').textContent = '🏅 Best ' + best();
+    function nextKey() { kCur = KEYS[Math.floor(Math.random() * KEYS.length)]; $('k-icon').textContent = kCur[0]; $('k-name').textContent = kCur[1]; }
+    $('k-start').onclick = () => {
+      kScore = 0; kLeft = 30; $('k-score').textContent = 'Score 0'; $('k-start').style.display = 'none'; $('k-feedback').textContent = '';
+      nextKey();
+      kTimer = setInterval(() => {
+        kLeft--; $('k-time').textContent = `⏱ ${kLeft}s`;
+        if (kLeft <= 0) {
+          clearInterval(kTimer); kTimer = null; kCur = null;
+          $('k-icon').textContent = '🏁'; $('k-name').textContent = `Time! You got ${kScore}`;
+          if (kScore > best()) { try { localStorage.setItem('psBest', kScore); } catch {} $('k-feedback').textContent = '🎉 New best score!'; confetti(100); }
+          $('k-best').textContent = '🏅 Best ' + best();
+          $('k-start').style.display = 'inline-flex'; $('k-start').textContent = '↺ Play again';
+        }
+      }, 1000);
+    };
+    document.addEventListener('keydown', e => {
+      if (!kTimer || !kCur || e.ctrlKey || e.metaKey || e.key.length > 1) return;
+      if (e.key.toLowerCase() === kCur[2]) { kScore++; $('k-score').textContent = 'Score ' + kScore; $('k-feedback').innerHTML = '<span style="color:var(--green)">✅ Yes!</span>'; nextKey(); }
+      else $('k-feedback').innerHTML = `<span style="color:var(--pink)">❌ Not ${e.key.toUpperCase()} – it’s ${kCur[2].toUpperCase()}</span>`;
+    });
+
+    /* ===== switch between games ===== */
+    document.querySelectorAll('[data-mode]').forEach(c => c.onclick = () => {
+      document.querySelectorAll('[data-mode]').forEach(x => x.classList.remove('on')); c.classList.add('on');
+      $('quiz').style.display = c.dataset.mode === 'quiz' ? 'block' : 'none';
+      $('keys').style.display = c.dataset.mode === 'keys' ? 'block' : 'none';
+    });
+    document.addEventListener('DOMContentLoaded', startQuiz);          // runs after main.js sets the level
+    document.addEventListener('click', e => { if (e.target.closest('.level-switch button')) startQuiz(); });
+  </script>
+</body>
+</html>
