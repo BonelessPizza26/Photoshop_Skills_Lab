@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Playground · Photoshop Skills Lab</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    /* ----- Playground-only styles ----- */
+    .menubar { display: flex; flex-wrap: wrap; gap: 4px; background: #262a38; border: 1px solid var(--line); border-radius: 14px; padding: 6px; margin-bottom: 14px; }
+    .menu { position: relative; }
+    .menu > button { background: none; border: 0; color: var(--text); font: 600 .92rem 'Inter'; padding: 8px 14px; border-radius: 8px; cursor: pointer; }
+    .menu > button:hover, .menu:focus-within > button { background: var(--panel-2); }
+    .menu-list { position: absolute; top: 100%; left: 0; min-width: 230px; background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 6px; z-index: 60; box-shadow: var(--shadow); display: none; }
+    .menu:hover .menu-list, .menu:focus-within .menu-list { display: block; animation: pop .15s; }
+    .menu-list button { display: flex; width: 100%; justify-content: space-between; gap: 18px; background: none; border: 0; color: var(--text); text-align: left; padding: 8px 10px; border-radius: 8px; font: 500 .9rem 'Inter'; cursor: pointer; }
+    .menu-list button:hover { background: #1d3550; }
+    .menu-list button small { color: var(--muted); }
+    .menu-list hr { border: 0; border-top: 1px solid var(--line); margin: 4px 0; }
+    .canvas-scroll { overflow: auto; max-height: 72vh; border-radius: 10px; background: #2b2b2b; padding: 0; }
+    .canvas-wrap { margin: 0 auto; transition: width .2s; }
+    .canvas-wrap canvas.layer { position: absolute; inset: 0; width: 100%; height: 100%; }
+    #ants { pointer-events: none; }
+    #ov { touch-action: none; }
+    .swatches { position: relative; width: 84px; height: 70px; margin: 6px 0 4px; }
+    .swatch { position: absolute; width: 46px; height: 46px; border-radius: 8px; border: 3px solid #fff; cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,.5); }
+    .swatch input { opacity: 0; width: 100%; height: 100%; cursor: pointer; }
+    #fg-sw { left: 0; top: 0; z-index: 2; }
+    #bg-sw { left: 28px; top: 22px; }
+    .side-block { border-top: 1px solid var(--line); padding-top: 14px; margin-top: 14px; }
+    .side-block h4 { margin-bottom: 6px; }
+    .mini-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+    .mini-grid .btn { justify-content: center; }
+    .status { display: flex; justify-content: space-between; font-size: .8rem; color: var(--muted); margin-top: 6px; }
+  </style>
+</head>
+<body>
+
+  <header class="page-hero" style="padding-bottom:20px">
+    <div class="blob b1"></div><div class="blob b3"></div>
+    <div class="container">
+      <span class="emoji">🎨</span>
+      <h1>The <span class="grad-text">Playground</span></h1>
+      <p class="muted" style="max-width:700px;margin:0 auto">A mini Photoshop in your browser. Pick a tool on the left, change its settings in the Options Bar, and try the challenges on the right. Shortcut keys work too!</p>
+    </div>
+  </header>
+
+  <section class="container" style="padding-top:10px">
+
+    <!-- ===== MENU BAR ===== -->
+    <div class="menubar">
+      <div class="menu"><button>File</button><div class="menu-list">
+        <button data-cmd="new">New blank canvas</button>
+        <button data-cmd="open">Open my own image… <small>Ctrl+O</small></button>
+        <button data-cmd="sample">Reload sample image</button><hr>
+        <button data-cmd="save">Download as PNG <small>Ctrl+S</small></button>
+      </div></div>
+      <div class="menu"><button>Edit</button><div class="menu-list">
+        <button data-cmd="undo">Undo <small>Ctrl+Z</small></button>
+        <button data-cmd="redo">Redo <small>Shift+Ctrl+Z</small></button><hr>
+        <button data-cmd="fillfg">Fill with foreground colour</button>
+        <button data-cmd="clear">Delete pixels in selection <small>Del</small></button>
+      </div></div>
+      <div class="menu"><button>Image</button><div class="menu-list">
+        <button data-cmd="rotcw">Rotate 90° clockwise</button>
+        <button data-cmd="rotccw">Rotate 90° anticlockwise</button>
+        <button data-cmd="rot180">Rotate 180°</button><hr>
+        <button data-cmd="fliph">Flip canvas horizontal</button>
+        <button data-cmd="flipv">Flip canvas vertical</button>
+      </div></div>
+      <div class="menu"><button>Select</button><div class="menu-list">
+        <button data-cmd="all">All <small>Ctrl+A</small></button>
+        <button data-cmd="deselect">Deselect <small>Ctrl+D</small></button>
+        <button data-cmd="inverse">Inverse <small>Shift+Ctrl+I</small></button>
+      </div></div>
+      <div class="menu"><button>Filter</button><div class="menu-list">
+        <button data-cmd="f-blur">Blur › Gaussian Blur</button>
+        <button data-cmd="f-sharpen">Sharpen › Sharpen</button>
+        <button data-cmd="f-noise">Noise › Add Noise</button>
+        <button data-cmd="f-pixel">Pixelate › Mosaic</button>
+        <button data-cmd="f-emboss">Stylize › Emboss</button>
+        <button data-cmd="f-edges">Stylize › Find Edges</button>
+        <button data-cmd="f-poster">Posterize</button>
+        <button data-cmd="f-invert">Invert <small>Ctrl+I</small></button>
+      </div></div>
+      <div class="menu"><button>View</button><div class="menu-list">
+        <button data-cmd="zin">Zoom in <small>Ctrl +</small></button>
+        <button data-cmd="zout">Zoom out <small>Ctrl −</small></button>
+        <button data-cmd="zfit">Fit on screen <small>Ctrl+0</small></button>
+      </div></div>
+      <input type="file" id="file-in" accept="image/*" hidden>
+    </div>
+
+    <div class="ps-app">
+      <!-- ===== TOOLBAR ===== -->
+      <div class="ps-toolbar" id="toolbar"></div>
+
+      <!-- ===== OPTIONS BAR + CANVAS ===== -->
+      <div>
+        <div class="ps-options" id="options"></div>
+        <div class="canvas-scroll" id="canvas-scroll">
+          <div class="canvas-wrap" id="canvas-wrap">
+            <canvas id="cv" width="800" height="500"></canvas>
+            <canvas id="ants" class="layer" width="800" height="500"></canvas>
+            <canvas id="ov" class="layer" width="800" height="500"></canvas>
+          </div>
+        </div>
+        <div class="status"><span id="st-size">800 × 500 px</span><span id="st-pos"></span><span id="st-zoom">100%</span></div>
+      </div>
+
+      <!-- ===== INFO PANEL ===== -->
+      <aside class="ps-info">
+        <h3 id="ti-title">🖌️ Brush Tool</h3>
+        <div class="how" id="ti-how"></div>
+
+        <div class="side-block">
+          <h4>Colours</h4>
+          <div style="display:flex;align-items:center;gap:14px">
+            <div class="swatches">
+              <label class="swatch" id="fg-sw" data-tip="Foreground"><input type="color" id="fg"></label>
+              <label class="swatch" id="bg-sw" data-tip="Background"><input type="color" id="bg"></label>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:6px">
+              <button class="btn btn-small" data-cmd="swap">⇄ Swap <kbd>X</kbd></button>
+              <button class="btn btn-small" data-cmd="resetcol">⬛⬜ Reset <kbd>D</kbd></button>
+            </div>
+          </div>
+        </div>
+
+        <div class="side-block">
+          <h4>Adjustments</h4>
+          <p class="muted" style="font-size:.82rem;margin:0 0 6px">Works on the selection (or the whole image if nothing is selected).</p>
+          <div class="controls" id="adj"></div>
+          <div class="mini-grid" style="margin-top:10px">
+            <button class="btn btn-small btn-primary" id="adj-apply">✓ Apply</button>
+            <button class="btn btn-small" id="adj-cancel">✕ Cancel</button>
+          </div>
+        </div>
+
+        <div class="side-block">
+          <h4>🏆 Challenges</h4>
+          <div id="challenges"></div>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <section class="container" style="padding-top:20px">
+    <div class="box info"><strong>ℹ️ About the Playground</strong>This is a simplified version of Photoshop for practice. It has one layer, so it works like editing the Background layer. Real Photoshop has many more settings – use what you learn here to experiment there! Best in Chrome or Edge.</div>
+    <div style="text-align:center;margin-top:20px"><button class="btn learn-btn" data-id="playground">Mark as learnt</button></div>
+  </section>
+
+  <script src="js/main.js"></script>
+  <script src="js/playground.js"></script>
+</body>
+</html>
