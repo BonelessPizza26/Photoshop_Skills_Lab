@@ -5,13 +5,64 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>The Workspace · Photoshop Skills Lab</title>
   <link rel="stylesheet" href="css/style.css">
+  <style>
+    /* ----- Export As replica ----- */
+    .exp { background: #2b2b2b; border: 1px solid #444; border-radius: 14px; overflow: hidden; color: #ddd; font-size: .9rem; box-shadow: var(--shadow); }
+    .exp-title { background: #1f1f1f; padding: 10px 16px; font-weight: 600; display: flex; align-items: center; gap: 8px; }
+    .exp-body { display: grid; grid-template-columns: 1fr 260px; }
+    @media (max-width: 1100px) { .exp-body { grid-template-columns: 1fr; } .exp-side { border-left: 0; border-top: 1px solid #222; } }
+    @media (max-width: 900px) { #export + section .demo-grid, .exp-wrap-grid { grid-template-columns: 1fr !important; } }
+    .exp-left { display: flex; flex-direction: column; min-width: 0; }
+    .exp-preview { position: relative; background: #3a3a3a; display: grid; place-items: center; padding: 18px; min-height: 320px; overflow: hidden; flex: 1; }
+    .exp-preview .checker { background: repeating-conic-gradient(#cfcfcf 0 25%, #fff 0 50%) 0 0 / 16px 16px; display: grid; place-items: center; max-width: 100%; }
+    .exp-preview img { display: block; max-width: 100%; max-height: 300px; image-rendering: pixelated; transition: transform .3s; transform-origin: 35% 40%; }
+    .exp-preview.zoomed img { transform: scale(3.2); }
+    .exp-bar { display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; padding: 8px 12px; background: #262626; border-top: 1px solid #1a1a1a; }
+    .exp-info { background: rgba(0,0,0,.45); padding: 4px 10px; border-radius: 6px; font-weight: 600; font-size: .85rem; color: #fff; }
+    .exp-preview.zoomed { place-items: start; }
+    .exp-side { background: #323232; padding: 14px 16px; border-left: 1px solid #222; }
+    .exp-side h4 { font: 700 .72rem 'Inter'; letter-spacing: .08em; text-transform: uppercase; color: #aaa; margin: 14px 0 8px; }
+    .exp-side h4:first-child { margin-top: 0; }
+    .exp-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 8px; }
+    .exp-row select, .exp-row input[type=number] { width: 120px; padding: 6px 8px; font-size: .88rem; background: #1f1f1f; border-color: #555; }
+    .exp-row input[type=range] { width: 120px; }
+    .exp-row label { display: flex; align-items: center; gap: 8px; cursor: pointer; }
+    .exp-row input[type=checkbox] { accent-color: var(--accent); transform: scale(1.2); }
+    .exp-row.hide { display: none; }
+    .exp-foot { display: flex; justify-content: flex-end; gap: 8px; padding: 12px 16px; background: #262626; border-top: 1px solid #1a1a1a; }
+    .hl { outline: 3px solid var(--yellow); outline-offset: 3px; border-radius: 8px; transition: outline-color .3s; }
+
+    .steps { counter-reset: s; list-style: none; padding: 0; margin: 0; }
+    .steps li { counter-increment: s; position: relative; padding: 12px 14px 12px 58px; margin-bottom: 10px; background: var(--panel); border: 1px solid var(--line); border-radius: 14px; cursor: pointer; transition: border-color .2s, transform .2s; }
+    .steps li:hover { border-color: var(--accent); transform: translateX(4px); }
+    .steps li::before { content: counter(s); position: absolute; left: 14px; top: 12px; width: 32px; height: 32px; border-radius: 10px; background: var(--grad); color: #fff; font: 800 1rem 'Poppins'; display: grid; place-items: center; }
+
+    .vs { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; }
+    @media (max-width: 760px) { .vs { grid-template-columns: 1fr; } }
+    .fmt-card { background: var(--panel); border: 1px solid var(--line); border-radius: 20px; padding: 26px; transition: transform .25s, border-color .25s; }
+    .fmt-card:hover { transform: translateY(-6px); }
+    .fmt-card.jpg:hover { border-color: var(--orange); } .fmt-card.png:hover { border-color: var(--green); }
+    .fmt-card .big-ico { font-size: 3.4rem; }
+    .fmt-card.jpg .big-ico { color: var(--orange); } .fmt-card.png .big-ico { color: var(--green); }
+    .fmt-card dl { display: grid; grid-template-columns: 130px 1fr; gap: 10px 14px; margin: 16px 0 0; }
+    .fmt-card dt { font-weight: 700; color: var(--muted); font-size: .9rem; }
+    .fmt-card dd { margin: 0; }
+    .game { display: grid; gap: 12px; }
+    .scenario { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 14px 18px; }
+    .scenario .q { flex: 1 1 280px; display: flex; gap: 12px; align-items: center; }
+    .scenario .q svg { font-size: 1.6rem; color: var(--accent); }
+    .scenario.right { border-color: var(--green); background: rgba(34,197,94,.08); }
+    .scenario.wrong { border-color: var(--pink); animation: shake .4s; }
+    .scenario .why { flex-basis: 100%; font-size: .92rem; color: var(--muted); display: none; }
+    .scenario.right .why, .scenario.wrong .why { display: block; }
+  </style>
 </head>
 <body>
 
   <header class="page-hero">
     <div class="blob b1"></div><div class="blob b2"></div>
     <div class="container">
-      <span class="emoji">🖥️</span>
+      <span class="emoji"><i data-i="workspace"></i></span>
       <h1>The <span class="grad-text">Workspace</span></h1>
       <p class="muted" style="max-width:640px;margin:0 auto">Before you edit anything, learn where everything lives. Click each yellow area on the screen below.</p>
     </div>
@@ -23,7 +74,7 @@
       <div class="mock-menu hot" data-part="menu"><span class="label">1 Menu Bar</span>File&nbsp; Edit&nbsp; Image&nbsp; Layer&nbsp; Select&nbsp; Filter&nbsp; View&nbsp; Window</div>
       <div class="mock-options hot" data-part="options"><span class="label">2 Options Bar</span></div>
       <div class="mock-body">
-        <div class="mock-tools hot" data-part="toolbar"><span class="label">3</span><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+        <div class="mock-tools hot" data-part="toolbar"><span class="label">3</span><i class="t"></i><i class="t"></i><i class="t"></i><i class="t"></i><i class="t"></i><i class="t"></i><i class="t"></i><i class="t"></i><i class="t"></i><i class="t"></i></div>
         <div class="mock-canvas hot" data-part="canvas"><span class="label">4 Canvas</span><img src="images/sample.svg" alt="Sample image on the canvas"></div>
         <div class="mock-panels">
           <div class="hot" data-part="properties"><span class="label">5 Properties / Colour</span><div class="mock-layer"></div><div class="mock-layer" style="width:60%"></div></div>
@@ -31,7 +82,7 @@
         </div>
       </div>
     </div>
-    <p class="center muted" style="margin-top:12px">👆 Click any highlighted area to find out what it does.</p>
+    <p class="center muted" style="margin-top:12px"><i data-i="click"></i> Click any highlighted area to find out what it does.</p>
   </section>
 
   <!-- ===== NEW DOCUMENT ===== -->
@@ -47,7 +98,7 @@
           <li>Choose the <strong>Colour Mode</strong>: RGB for screen, CMYK for print.</li>
           <li>Click <strong>Create</strong>.</li>
         </ol>
-        <div class="box tip"><strong>💡 Tip</strong>Opening a photo instead? Use <strong>File › Open</strong> (<kbd>Ctrl</kbd>+<kbd>O</kbd>) or just drag the photo onto Photoshop.</div>
+        <div class="box tip"><strong><i data-i="bulb"></i> Tip</strong>Opening a photo instead? Use <strong>File › Open</strong> (<kbd>Ctrl</kbd>+<kbd>O</kbd>) or just drag the photo onto Photoshop.</div>
         <div class="l2">An A4 page at 300 ppi is 2480 × 3508 pixels. Size in pixels = size in inches × ppi. Choosing the right size <em>before</em> you start avoids blurry, stretched work later. Also look at <strong>Artboards</strong> – they let you design several screens or sizes in one file.</div>
       </div>
       <div class="reveal">
@@ -67,21 +118,121 @@
     </div>
   </section>
 
-  <!-- ===== SAVING ===== -->
-  <section class="container">
-    <div class="section-title reveal"><h2>Saving &amp; exporting</h2><p>Always keep a PSD, then export a copy for sharing.</p></div>
-    <div class="grid">
-      <div class="card reveal"><div class="icon">🗂️</div><h3>Save as PSD</h3><p><strong>File › Save As</strong> (<kbd>Shift</kbd>+<kbd>Ctrl</kbd>+<kbd>S</kbd>). Keeps every layer so you can keep editing.</p></div>
-      <div class="card reveal"><div class="icon">📷</div><h3>Export JPG</h3><p><strong>File › Export › Export As</strong>. Small files for photos. No transparency.</p></div>
-      <div class="card reveal"><div class="icon">🔲</div><h3>Export PNG</h3><p>Use when you need a <strong>transparent background</strong>, e.g. a logo.</p></div>
-      <div class="card reveal"><div class="icon">📄</div><h3>Save as PDF</h3><p>Best for sending printed work to a printer or tutor.</p></div>
+  <!-- ===== SAVING & EXPORTING ===== -->
+  <section class="container" id="export">
+    <div class="section-title reveal">
+      <h2>Saving &amp; exporting</h2>
+      <p>Keep a <strong>PSD</strong> so you can carry on editing, then <strong>export a copy</strong> as a JPEG or PNG to share.</p>
     </div>
+    <div class="grid">
+      <div class="card reveal"><div class="icon"><i data-i="psd"></i></div><h3>1. Save your PSD</h3><p><strong>File › Save As</strong> (<kbd>Shift</kbd>+<kbd>Ctrl</kbd>+<kbd>S</kbd>) and pick <strong>Photoshop (.PSD)</strong>. This keeps every layer, so it’s your “master” file.</p></div>
+      <div class="card reveal"><div class="icon"><i data-i="export"></i></div><h3>2. Export a copy</h3><p>Use <strong>File › Export › Export As</strong> to make a JPEG or PNG for the web, social media, email or your portfolio.</p></div>
+      <div class="card reveal"><div class="icon"><i data-i="pdf"></i></div><h3>Printing?</h3><p>Use <strong>File › Save a Copy › Photoshop PDF</strong> when sending work to a printer or uploading print work.</p></div>
+    </div>
+  </section>
+
+  <!-- ===== EXPORT AS GUIDE ===== -->
+  <section class="container" style="padding-top:10px">
+    <div class="section-title reveal">
+      <h2><span class="section-icon"><i data-i="export"></i> How to use Export As</span></h2>
+      <p>This is a working copy of Photoshop’s <strong>Export As</strong> window. Click a step to highlight that setting, then try changing it and watch the preview and file size update.</p>
+    </div>
+    <div class="demo-grid" style="align-items:start;grid-template-columns:minmax(0,1fr) minmax(0,1.45fr)">
+      <ol class="steps reveal" id="exp-steps">
+        <li data-hl="">Finish your design and <strong>save the PSD first</strong>, so you never lose your layers.</li>
+        <li data-hl="">Go to <strong>File › Export › Export As…</strong><br><span class="muted" style="font-size:.9rem">Shortcut: <kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>Ctrl</kbd>+<kbd>W</kbd> (Mac: <kbd>⌥</kbd>+<kbd>Shift</kbd>+<kbd>⌘</kbd>+<kbd>W</kbd>)</span></li>
+        <li data-hl="row-format">Under <strong>File Settings</strong>, choose the <strong>Format</strong>: JPG or PNG.</li>
+        <li data-hl="row-quality">JPG: set the <strong>Quality</strong>. 60–90% keeps it looking good with a small file.</li>
+        <li data-hl="row-trans">PNG: tick <strong>Transparency</strong> to keep a see-through background (great for logos).</li>
+        <li data-hl="row-size">Set the <strong>Image Size</strong>, e.g. 1080 px wide for Instagram. Width and height stay linked so nothing stretches.</li>
+        <li data-hl="row-srgb">Leave <strong>Convert to sRGB</strong> ticked so colours look right on screens.</li>
+        <li data-hl="exp-info">Check the <strong>preview and file size</strong> (bottom left of the preview).</li>
+        <li data-hl="exp-go">Click <strong>Export</strong>, choose a folder and give the file a clear name, e.g. <code>khan_poster_v1.jpg</code>.</li>
+      </ol>
+      <div class="reveal">
+        <div class="exp">
+          <div class="exp-title"><i data-i="export"></i> Export As</div>
+          <div class="exp-body">
+            <div class="exp-left">
+              <div class="exp-preview" id="exp-preview">
+                <div class="checker" id="exp-checker"><img id="exp-img" alt="Export preview"></div>
+              </div>
+              <div class="exp-bar">
+                <span class="exp-info" id="exp-info">…</span>
+                <button class="btn btn-small" id="exp-zoom"><i data-i="zoom"></i> Zoom in</button>
+              </div>
+            </div>
+            <div class="exp-side">
+              <h4>File Settings</h4>
+              <div class="exp-row" id="row-format"><span>Format</span>
+                <select id="exp-format"><option value="png">PNG</option><option value="jpg">JPG</option></select></div>
+              <div class="exp-row hide" id="row-quality"><span>Quality <b id="exp-q-v">80%</b></span>
+                <input type="range" id="exp-q" min="1" max="100" value="80"></div>
+              <div class="exp-row" id="row-trans"><label><input type="checkbox" id="exp-trans" checked> Transparency</label></div>
+              <h4>Image Size</h4>
+              <div class="exp-row" id="row-size"><span>Width (px)</span><input type="number" id="exp-w" min="20" max="2400" value="600"></div>
+              <div class="exp-row"><span>Height (px)</span><input type="number" id="exp-h" min="20" max="2400" value="600"></div>
+              <h4>Colour Space</h4>
+              <div class="exp-row" id="row-srgb"><label><input type="checkbox" checked> Convert to sRGB</label></div>
+              <h4>Metadata</h4>
+              <div class="exp-row"><label><input type="radio" name="meta" checked> None</label></div>
+            </div>
+          </div>
+          <div class="exp-foot">
+            <button class="btn btn-small" id="exp-reset">Reset</button>
+            <button class="btn btn-small btn-primary" id="exp-go"><i data-i="download"></i> Export</button>
+          </div>
+        </div>
+        <div class="box tip"><strong><i data-i="flask"></i> Experiment</strong>Switch to <strong>JPG</strong>, drop the Quality to 5% and press <em>Zoom in</em>. See the blocky “artefacts” around the letters? That’s JPEG compression throwing detail away. Now compare the file size to PNG.</div>
+      </div>
+    </div>
+
+    <div class="grid" style="margin-top:24px">
+      <div class="box tip reveal" style="margin:0"><strong><i data-i="bulb"></i> Quick Export</strong><strong style="display:inline">File › Export › Quick Export as PNG</strong> exports in one click using your last settings.</div>
+      <div class="box info reveal" style="margin:0"><strong><i data-i="info"></i> Can’t see JPEG in Save As?</strong>In newer versions, <strong>Save As</strong> only lists formats that keep layers. Use <strong>File › Save a Copy</strong> or <strong>Export As</strong> for JPEG and PNG.</div>
+      <div class="box info reveal" style="margin:0"><strong><i data-i="layers"></i> Just one layer?</strong>Right-click a layer in the Layers panel and choose <strong>Export As</strong> to export only that layer, e.g. a logo.</div>
+    </div>
+  </section>
+
+  <!-- ===== JPEG vs PNG ===== -->
+  <section class="container">
+    <div class="section-title reveal"><h2>JPEG or PNG?</h2><p>Both are images, but they work in very different ways. Choose the right one for the job.</p></div>
+    <div class="vs">
+      <div class="fmt-card jpg reveal">
+        <div class="big-ico"><i data-i="jpg"></i></div>
+        <h3>JPEG <span class="muted" style="font-weight:500">(.jpg)</span></h3>
+        <p>Short for <em>Joint Photographic Experts Group</em>. Made for <strong>photographs</strong>.</p>
+        <dl>
+          <dt>Compression</dt><dd><strong>Lossy</strong> – it throws away detail you’re unlikely to notice, to make the file small.</dd>
+          <dt>Transparency</dt><dd><strong>No</strong> – transparent areas become a solid colour (usually white).</dd>
+          <dt>File size</dt><dd>Small. You choose the quality: lower quality means a smaller file.</dd>
+          <dt>Best for</dt><dd>Photos, social media posts, website images, emailing work.</dd>
+          <dt>Watch out</dt><dd>Quality drops a little <em>every</em> time you re-save a JPEG. Always edit the PSD, not the JPEG.</dd>
+        </dl>
+      </div>
+      <div class="fmt-card png reveal">
+        <div class="big-ico"><i data-i="png"></i></div>
+        <h3>PNG <span class="muted" style="font-weight:500">(.png)</span></h3>
+        <p>Short for <em>Portable Network Graphics</em>. Made for <strong>graphics</strong>.</p>
+        <dl>
+          <dt>Compression</dt><dd><strong>Lossless</strong> – every single pixel is kept exactly as it was.</dd>
+          <dt>Transparency</dt><dd><strong>Yes</strong> – see-through backgrounds stay see-through.</dd>
+          <dt>File size</dt><dd>Bigger for photos, but small for simple graphics with flat colours.</dd>
+          <dt>Best for</dt><dd>Logos, icons, stickers, text, screenshots, anything with a transparent background.</dd>
+          <dt>Watch out</dt><dd>A large photo saved as PNG can be 5–10× bigger than a JPEG.</dd>
+        </dl>
+      </div>
+    </div>
+
+    <h3 class="center reveal" style="margin-top:50px"><span class="section-icon"><i data-i="target"></i> Which format would you choose?</span></h3>
+    <p class="center muted reveal">Click an answer for each job. <strong id="fmt-score">0 / 7</strong></p>
+    <div class="game" id="fmt-game"></div>
   </section>
 
   <!-- ===== SHORTCUTS ===== -->
   <section class="container">
     <div class="section-title reveal"><h2>Essential shortcuts</h2><p>On a Mac, use <kbd>⌘ Cmd</kbd> instead of <kbd>Ctrl</kbd> and <kbd>⌥ Option</kbd> instead of <kbd>Alt</kbd>.</p></div>
-    <input class="search" type="text" id="sc-search" placeholder="🔍 Search shortcuts… e.g. zoom" style="display:block">
+    <input class="search" type="text" id="sc-search" placeholder="Search shortcuts… e.g. zoom" style="display:block">
     <table class="shortcuts reveal">
       <thead><tr><th>What it does</th><th>Shortcut</th></tr></thead>
       <tbody id="sc-body"></tbody>
@@ -89,16 +240,19 @@
     <div style="text-align:center;margin-top:30px"><button class="btn learn-btn" data-id="workspace">Mark as learnt</button></div>
   </section>
 
+  <script src="js/icons.js"></script>
   <script src="js/main.js"></script>
   <script>
+    const $ = id => document.getElementById(id);
+
     /* ---- hotspot pop-ups ---- */
     const parts = {
-      menu:       { icon: '📋', title: 'Menu Bar', html: '<p>The row of menus at the very top: <strong>File, Edit, Image, Layer, Select, Filter, View, Window</strong>.</p><p>Lost a panel? Go to <strong>Window</strong> and tick it. Messed up the layout? <strong>Window › Workspace › Reset Essentials</strong>.</p>' },
-      options:    { icon: '🎛️', title: 'Options Bar', html: '<p>This bar <strong>changes depending on the tool you pick</strong>. With the Brush you will see size, hardness, opacity and flow. With the Crop tool you will see ratio settings.</p><p>If a tool is acting strangely, check the Options Bar first!</p>' },
-      toolbar:    { icon: '🧰', title: 'Toolbar', html: '<p>All the tools live down the left side. A <strong>small triangle</strong> in a tool’s corner means more tools are hidden underneath – <strong>right-click</strong> (or click and hold) to see them.</p><p>Hover a tool to see its name and shortcut key.</p><p><a href="tools.html">👉 Learn every tool</a></p>' },
-      canvas:     { icon: '🖼️', title: 'Canvas', html: '<p>The canvas is your image – the area you work on. The grey around it is the pasteboard.</p><ul><li>Zoom: <kbd>Ctrl</kbd>+<kbd>+</kbd> / <kbd>Ctrl</kbd>+<kbd>-</kbd></li><li>Fit on screen: <kbd>Ctrl</kbd>+<kbd>0</kbd></li><li>Move around: hold <kbd>Space</kbd> and drag</li></ul>' },
-      properties: { icon: '🎨', title: 'Properties & Colour panels', html: '<p>The <strong>Properties</strong> panel shows settings for whatever is selected (a layer, text, an adjustment).</p><p>The <strong>Colour</strong> and <strong>Swatches</strong> panels let you pick colours. Your two current colours (foreground and background) are at the bottom of the toolbar. Press <kbd>D</kbd> to reset to black/white and <kbd>X</kbd> to swap them.</p>' },
-      layers:     { icon: '📚', title: 'Layers Panel', html: '<p>The most important panel! Each layer is like a clear sheet of plastic stacked on top of the others.</p><p>The blue (highlighted) layer is the one you are editing. If something “won’t work”, check you have the right layer selected.</p><p><a href="layers.html">👉 Learn about layers</a></p>' }
+      menu:       { icon: 'menu', title: 'Menu Bar', html: '<p>The row of menus at the very top: <strong>File, Edit, Image, Layer, Select, Filter, View, Window</strong>.</p><p>Lost a panel? Go to <strong>Window</strong> and tick it. Messed up the layout? <strong>Window › Workspace › Reset Essentials</strong>.</p>' },
+      options:    { icon: 'tune', title: 'Options Bar', html: '<p>This bar <strong>changes depending on the tool you pick</strong>. With the Brush you will see size, hardness, opacity and flow. With the Crop tool you will see ratio settings.</p><p>If a tool is acting strangely, check the Options Bar first!</p>' },
+      toolbar:    { icon: 'tools', title: 'Toolbar', html: '<p>All the tools live down the left side. A <strong>small triangle</strong> in a tool’s corner means more tools are hidden underneath – <strong>right-click</strong> (or click and hold) to see them.</p><p>Hover a tool to see its name and shortcut key.</p><p><a href="tools.html">Learn every tool →</a></p>' },
+      canvas:     { icon: 'image', title: 'Canvas', html: '<p>The canvas is your image – the area you work on. The grey around it is the pasteboard.</p><ul><li>Zoom: <kbd>Ctrl</kbd>+<kbd>+</kbd> / <kbd>Ctrl</kbd>+<kbd>-</kbd></li><li>Fit on screen: <kbd>Ctrl</kbd>+<kbd>0</kbd></li><li>Move around: hold <kbd>Space</kbd> and drag</li></ul>' },
+      properties: { icon: 'palette', title: 'Properties & Colour panels', html: '<p>The <strong>Properties</strong> panel shows settings for whatever is selected (a layer, text, an adjustment).</p><p>The <strong>Colour</strong> and <strong>Swatches</strong> panels let you pick colours. Your two current colours (foreground and background) are at the bottom of the toolbar. Press <kbd>D</kbd> to reset to black/white and <kbd>X</kbd> to swap them.</p>' },
+      layers:     { icon: 'layers', title: 'Layers Panel', html: '<p>The most important panel! Each layer is like a clear sheet of plastic stacked on top of the others.</p><p>The blue (highlighted) layer is the one you are editing. If something “won’t work”, check you have the right layer selected.</p><p><a href="layers.html">Learn about layers →</a></p>' }
     };
     document.querySelectorAll('.ps-mock .hot').forEach(el =>
       el.addEventListener('click', () => openModal(parts[el.dataset.part])));
@@ -110,16 +264,104 @@
       web:    'Around <strong>1920 × 600 px</strong> · 72 ppi · <strong>RGB</strong> · export as JPG or PNG',
       flyer:  'Preset <strong>Print › A5</strong> · 148 × 210 mm · <strong>300 ppi</strong> · <strong>CMYK</strong> · add 3 mm bleed'
     };
-    document.getElementById('doc-type').addEventListener('change', e => {
-      const r = document.getElementById('doc-result');
+    $('doc-type').addEventListener('change', e => {
+      const r = $('doc-result');
       r.style.display = e.target.value ? 'block' : 'none';
-      r.innerHTML = '<strong>✅ Use these settings</strong>' + (docs[e.target.value] || '');
+      r.innerHTML = `<strong>${ic('check-circle')} Use these settings</strong>` + (docs[e.target.value] || '');
     });
+
+    /* ================= EXPORT AS REPLICA ================= */
+    // The artwork is drawn with code (a round sticker with a transparent background)
+    const art = document.createElement('canvas'); art.width = art.height = 600;
+    (function drawArt(c) {
+      const R = 290, cx = 300, cy = 300;
+      c.save(); c.beginPath(); c.arc(cx, cy, R, 0, Math.PI * 2); c.clip();
+      const g = c.createLinearGradient(0, 0, 0, 600);
+      g.addColorStop(0, '#2b1e5c'); g.addColorStop(.5, '#d9487d'); g.addColorStop(.8, '#ffa45b'); g.addColorStop(1, '#ffd27a');
+      c.fillStyle = g; c.fillRect(0, 0, 600, 600);
+      const sun = c.createRadialGradient(300, 330, 0, 300, 330, 150);
+      sun.addColorStop(0, '#fff6c9'); sun.addColorStop(.5, '#ffd25c'); sun.addColorStop(1, 'rgba(255,210,92,0)');
+      c.fillStyle = sun; c.fillRect(0, 0, 600, 600);
+      c.fillStyle = '#47265d'; c.beginPath(); c.moveTo(0, 600); c.lineTo(0, 420); c.lineTo(140, 300); c.lineTo(260, 430); c.lineTo(400, 280); c.lineTo(600, 450); c.lineTo(600, 600); c.fill();
+      c.fillStyle = '#2a1640'; c.beginPath(); c.moveTo(0, 600); c.lineTo(0, 500); c.quadraticCurveTo(300, 440, 600, 520); c.lineTo(600, 600); c.fill();
+      c.restore();
+      c.lineWidth = 14; c.strokeStyle = '#fff'; c.beginPath(); c.arc(cx, cy, R - 7, 0, Math.PI * 2); c.stroke();
+      c.fillStyle = '#fff'; c.textAlign = 'center'; c.font = '800 64px Poppins, Arial, sans-serif';
+      c.fillText('SUNSET', 300, 170); c.font = '700 30px Poppins, Arial, sans-serif'; c.fillText('PHOTO CLUB', 300, 215);
+    })(art.getContext('2d'));
+
+    const state = { fmt: 'png', q: 80, trans: true, w: 600, h: 600 };
+    let lastUrl = '', zoomed = false;
+    function render() {
+      $('row-quality').classList.toggle('hide', state.fmt !== 'jpg');
+      $('row-trans').classList.toggle('hide', state.fmt !== 'png');
+      const out = document.createElement('canvas'); out.width = state.w; out.height = state.h;
+      const c = out.getContext('2d');
+      if (state.fmt === 'jpg' || !state.trans) { c.fillStyle = '#ffffff'; c.fillRect(0, 0, out.width, out.height); } // JPEG can't be transparent
+      c.drawImage(art, 0, 0, out.width, out.height);
+      lastUrl = state.fmt === 'jpg' ? out.toDataURL('image/jpeg', state.q / 100) : out.toDataURL('image/png');
+      $('exp-img').src = lastUrl;
+      const kb = Math.round((lastUrl.length - lastUrl.indexOf(',') - 1) * 3 / 4 / 1024);
+      $('exp-info').textContent = `${state.fmt.toUpperCase()} · ${state.w} × ${state.h} px · ${kb >= 1024 ? (kb / 1024).toFixed(1) + ' MB' : kb + ' KB'}`;
+    }
+    $('exp-format').onchange = e => { state.fmt = e.target.value; render(); };
+    $('exp-q').oninput = e => { state.q = +e.target.value; $('exp-q-v').textContent = state.q + '%'; render(); };
+    $('exp-trans').onchange = e => { state.trans = e.target.checked; render(); };
+    $('exp-w').onchange = e => { state.w = Math.max(20, Math.min(2400, +e.target.value || 600)); state.h = state.w; $('exp-w').value = state.w; $('exp-h').value = state.h; render(); };
+    $('exp-h').onchange = e => { state.h = Math.max(20, Math.min(2400, +e.target.value || 600)); state.w = state.h; $('exp-w').value = state.w; $('exp-h').value = state.h; render(); };
+    $('exp-zoom').onclick = () => { zoomed = !zoomed; $('exp-preview').classList.toggle('zoomed', zoomed); $('exp-zoom').innerHTML = zoomed ? ic('zoom-out') + ' Zoom out' : ic('zoom') + ' Zoom in'; };
+    $('exp-reset').onclick = () => { Object.assign(state, { fmt: 'png', q: 80, trans: true, w: 600, h: 600 }); $('exp-format').value = 'png'; $('exp-q').value = 80; $('exp-q-v').textContent = '80%'; $('exp-trans').checked = true; $('exp-w').value = $('exp-h').value = 600; render(); };
+    $('exp-go').onclick = () => {
+      const a = document.createElement('a'); a.href = lastUrl; a.download = `sunset-sticker.${state.fmt}`; a.click();
+      toast(`Exported sunset-sticker.${state.fmt}`, 'download');
+    };
+    // clicking a step highlights the matching setting
+    document.querySelectorAll('#exp-steps li').forEach(li => li.addEventListener('click', () => {
+      document.querySelectorAll('.hl').forEach(x => x.classList.remove('hl'));
+      const id = li.dataset.hl; if (!id) return;
+      if (id === 'row-quality' && state.fmt !== 'jpg') { $('exp-format').value = 'jpg'; state.fmt = 'jpg'; render(); }
+      if (id === 'row-trans' && state.fmt !== 'png') { $('exp-format').value = 'png'; state.fmt = 'png'; render(); }
+      $(id).classList.add('hl');
+      setTimeout(() => $(id).classList.remove('hl'), 2500);
+    }));
+    try { render(); } catch (e) { $('exp-info').textContent = 'Open with Live Server to try exporting'; }
+
+    /* ================= WHICH FORMAT GAME ================= */
+    const JOBS = [
+      { icon: 'camera', q: 'A holiday photo for a website gallery', a: 'JPG', why: 'Photos are smallest as JPEG, so the page loads fast.' },
+      { icon: 'certificate', q: 'A logo with no background, to place on a poster', a: 'PNG', why: 'PNG keeps the transparent background around the logo.' },
+      { icon: 'keyboard', q: 'A screenshot of a menu with lots of small text', a: 'PNG', why: 'PNG keeps text crisp – JPEG adds fuzzy blocks around letters.' },
+      { icon: 'phone', q: 'A photo for an Instagram post', a: 'JPG', why: 'Social media photos are JPEGs – small and good quality.' },
+      { icon: 'brush', q: 'A digital painting you want to keep editing next lesson', a: 'PSD', why: 'Trick question! Keep the PSD so your layers are saved. Export a JPG or PNG copy later.' },
+      { icon: 'star', q: 'A sticker or icon for an app', a: 'PNG', why: 'Icons need transparent edges and sharp, flat colours – perfect for PNG.' },
+      { icon: 'web', q: 'A large photo to email to a client quickly', a: 'JPG', why: 'JPEG keeps the file size small enough to email.' }
+    ];
+    let fmtScore = 0;
+    $('fmt-game').innerHTML = JOBS.map((j, i) => `
+      <div class="scenario reveal visible" data-i="${i}">
+        <div class="q">${ic(j.icon)}<span>${j.q}</span></div>
+        <div class="btn-row" style="margin:0">${['JPG', 'PNG', 'PSD'].map(f => `<button class="btn btn-small" data-f="${f}">${f}</button>`).join('')}</div>
+        <div class="why"></div>
+      </div>`).join('');
+    document.querySelectorAll('.scenario').forEach(el => el.querySelectorAll('button').forEach(b => b.onclick = () => {
+      if (el.classList.contains('right')) return;
+      const j = JOBS[el.dataset.i];
+      el.classList.remove('wrong'); void el.offsetWidth;
+      if (b.dataset.f === j.a) {
+        el.classList.add('right'); fmtScore++;
+        el.querySelector('.why').innerHTML = `<strong style="color:var(--green)">${ic('check')} ${j.a}.</strong> ${j.why}`;
+        $('fmt-score').textContent = `${fmtScore} / ${JOBS.length}`;
+        if (fmtScore === JOBS.length) { confetti(100); toast('All correct – format expert!', 'trophy'); }
+      } else {
+        el.classList.add('wrong');
+        el.querySelector('.why').innerHTML = `<strong style="color:var(--pink)">Not ${b.dataset.f}.</strong> Think about transparency, file size and whether you’ll edit it again.`;
+      }
+    }));
 
     /* ---- shortcut table with live search ---- */
     const shortcuts = [
       ['Undo / step back', 'Ctrl+Z'], ['Redo', 'Shift+Ctrl+Z'], ['Save', 'Ctrl+S'], ['Save As', 'Shift+Ctrl+S'],
-      ['New document', 'Ctrl+N'], ['Open', 'Ctrl+O'], ['Zoom in / out', 'Ctrl + / Ctrl -'], ['Fit on screen', 'Ctrl+0'],
+      ['Export As', 'Alt+Shift+Ctrl+W'], ['New document', 'Ctrl+N'], ['Open', 'Ctrl+O'], ['Zoom in / out', 'Ctrl + / Ctrl -'], ['Fit on screen', 'Ctrl+0'],
       ['Move around (hand)', 'Hold Space'], ['Free Transform (resize/rotate)', 'Ctrl+T'], ['Deselect', 'Ctrl+D'],
       ['Select all', 'Ctrl+A'], ['Invert selection', 'Shift+Ctrl+I'], ['New layer', 'Shift+Ctrl+N'],
       ['Duplicate layer', 'Ctrl+J'], ['Bigger / smaller brush', '] / ['], ['Reset colours to black & white', 'D'],
@@ -127,11 +369,11 @@
       ['Clone Stamp', 'S'], ['Crop tool', 'C'], ['Text tool', 'T'], ['Hide all panels', 'Tab']
     ];
     const keys = s => s.split(/(\+| \/ | )/).map(k => ['+', ' / ', ' '].includes(k) ? k : `<kbd>${k}</kbd>`).join('');
-    const renderSc = q => document.getElementById('sc-body').innerHTML = shortcuts
+    const renderSc = q => $('sc-body').innerHTML = shortcuts
       .filter(([a]) => a.toLowerCase().includes(q.toLowerCase()))
       .map(([a, k]) => `<tr><td>${a}</td><td>${keys(k)}</td></tr>`).join('') || '<tr><td colspan="2">No match – try another word.</td></tr>';
     renderSc('');
-    document.getElementById('sc-search').addEventListener('input', e => renderSc(e.target.value));
+    $('sc-search').addEventListener('input', e => renderSc(e.target.value));
   </script>
 </body>
 </html>

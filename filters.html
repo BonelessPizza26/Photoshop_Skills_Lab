@@ -35,7 +35,7 @@
   <header class="page-hero">
     <div class="blob b1"></div><div class="blob b3"></div>
     <div class="container">
-      <span class="emoji">✨</span>
+      <span class="emoji"><i data-i="filters"></i></span>
       <h1>Filters &amp; <span class="grad-text">Effects</span></h1>
       <p class="muted" style="max-width:660px;margin:0 auto">Filters change the look of a layer in one go – blur it, sharpen it, distort it or turn it into art. Find them in the <strong>Filter</strong> menu.</p>
     </div>
@@ -55,7 +55,7 @@
           </div>
         </div>
         <div>
-          <h3 id="f-name">Pick a filter ↓</h3>
+          <h3 id="f-name">Pick a filter below</h3>
           <p class="muted" id="f-path" style="font-size:.9rem"></p>
           <p id="f-desc">Click any thumbnail below to apply that filter. Drag across the image to compare.</p>
           <div class="controls" id="f-strength-wrap" style="display:none">
@@ -85,8 +85,8 @@
           <li>Use the <strong>Preview</strong> tick-box to compare before/after.</li>
           <li>Click <strong>OK</strong>.</li>
         </ol>
-        <div class="box tip"><strong>💡 Less is more</strong>A subtle filter usually looks more professional. If people notice the filter before the picture, it is too strong.</div>
-        <div class="box warn"><strong>⚠️ Greyed out?</strong>Filters don’t work on Type or Shape layers until you rasterise them or convert them to a Smart Object.</div>
+        <div class="box tip"><strong><i data-i="bulb"></i> Less is more</strong>A subtle filter usually looks more professional. If people notice the filter before the picture, it is too strong.</div>
+        <div class="box warn"><strong><i data-i="alert"></i> Greyed out?</strong>Filters don’t work on Type or Shape layers until you rasterise them or convert them to a Smart Object.</div>
       </div>
       <div class="reveal">
         <div class="l2">
@@ -98,13 +98,14 @@
             <li>It comes with a <strong>filter mask</strong> – paint black to remove the filter from parts of the image (e.g. blur the background but keep the person sharp).</li>
             <li>Double-click the small sliders icon to change its blend mode and opacity.</li>
           </ul>
-          <p>Using Smart Filters shows you understand <strong>non-destructive workflow</strong> – a key skill at Level 2.</p>
+          <p>Using Smart Filters shows you understand <strong>non-destructive workflow</strong> – a key professional skill.</p>
         </div>
       </div>
     </div>
     <div style="text-align:center;margin-top:30px"><button class="btn learn-btn" data-id="filters">Mark as learnt</button></div>
   </section>
 
+  <script src="js/icons.js"></script>
   <script src="js/main.js"></script>
   <script>
     const $ = id => document.getElementById(id);
@@ -145,7 +146,7 @@
           const big = document.createElement('canvas'); big.width = w; big.height = h;
           const b = big.getContext('2d'); b.imageSmoothingEnabled = false; b.drawImage(small, 0, 0, w, h);
           try { res(big.toDataURL()); }
-          catch { toast('Pixelate needs Live Server – see the README'); res('images/sample.svg'); }
+          catch { toast('Pixelate needs Live Server – see the README', 'alert'); res('images/sample.svg'); }
         };
         img.src = 'images/sample.svg';
       });
@@ -167,7 +168,7 @@
       current = FILTERS[i];
       document.querySelectorAll('.fthumb').forEach(t => t.classList.toggle('on', +t.dataset.i === i));
       $('f-name').textContent = current.name;
-      $('f-path').textContent = current.path ? '📍 ' + current.path : '';
+      $('f-path').innerHTML = current.path ? ic('pin') + ' ' + current.path : '';
       $('f-desc').textContent = current.desc;
       $('f-lbl').textContent = current.name === 'None' ? 'After' : current.name;
       $('f-s-label').textContent = current.label || 'Strength';
@@ -183,23 +184,23 @@
 
     /* ---------- filter menu cards ---------- */
     const MENU = [
-      { i: '🌫️', t: 'Blur', d: 'Gaussian, Motion, Radial, Lens and Surface Blur. The Blur Gallery has Tilt-Shift (makes real places look like tiny models!) and Field Blur.' },
-      { i: '🔪', t: 'Sharpen', d: 'Unsharp Mask and Smart Sharpen make details crisper. Always sharpen last, and zoom to 100% to check.' },
-      { i: '🌀', t: 'Distort', d: 'Wave, Ripple, Twirl, Pinch, Spherize and Displace bend the pixels into new shapes.' },
-      { i: '🎨', t: 'Filter Gallery', d: 'Artistic effects: Cutout, Dry Brush, Watercolour, Poster Edges, Sketch styles and more – with a big preview window.' },
-      { i: '💠', t: 'Pixelate', d: 'Mosaic, Crystallize, Color Halftone (comic-book dots) and Pointillize.' },
-      { i: '🖋️', t: 'Stylize', d: 'Find Edges, Emboss, Wind, Extrude and Oil Paint – strong graphic effects.' },
-      { i: '📡', t: 'Noise', d: 'Add Noise for grain. Reduce Noise and Dust & Scratches clean up old or low-light photos.' },
-      { i: '🫠', t: 'Liquify', d: 'Push, pull, bloat and pucker pixels. Also has face-aware tools – use these responsibly.' },
-      { i: '📷', t: 'Camera Raw Filter', d: 'A full photo-editing panel: exposure, temperature, clarity, texture, dehaze and colour grading in one place.', l2: true },
-      { i: '🤖', t: 'Neural Filters', d: 'AI-powered filters such as Colourise (adds colour to black & white photos) and Style Transfer. Some need downloading first.', l2: true }
+      { i: 'blur', t: 'Blur', d: 'Gaussian, Motion, Radial, Lens and Surface Blur. The Blur Gallery has Tilt-Shift (makes real places look like tiny models!) and Field Blur.' },
+      { i: 'focus', t: 'Sharpen', d: 'Unsharp Mask and Smart Sharpen make details crisper. Always sharpen last, and zoom to 100% to check.' },
+      { i: 'swirl', t: 'Distort', d: 'Wave, Ripple, Twirl, Pinch, Spherize and Displace bend the pixels into new shapes.' },
+      { i: 'palette', t: 'Filter Gallery', d: 'Artistic effects: Cutout, Dry Brush, Watercolour, Poster Edges, Sketch styles and more – with a big preview window.' },
+      { i: 'pixel', t: 'Pixelate', d: 'Mosaic, Crystallize, Color Halftone (comic-book dots) and Pointillize.' },
+      { i: 'hdr', t: 'Stylize', d: 'Find Edges, Emboss, Wind, Extrude and Oil Paint – strong graphic effects.' },
+      { i: 'grain', t: 'Noise', d: 'Add Noise for grain. Reduce Noise and Dust & Scratches clean up old or low-light photos.' },
+      { i: 'liquify', t: 'Liquify', d: 'Push, pull, bloat and pucker pixels. Also has face-aware tools – use these responsibly.' },
+      { i: 'aperture', t: 'Camera Raw Filter', d: 'A full photo-editing panel: exposure, temperature, clarity, texture, dehaze and colour grading in one place.', l2: true },
+      { i: 'robot', t: 'Neural Filters', d: 'AI-powered filters such as Colourise (adds colour to black & white photos) and Style Transfer. Some need downloading first.', l2: true }
     ];
     $('fmenu').innerHTML = MENU.map((m, n) => `<div class="card clickable reveal visible ${m.l2 ? 'l2-card' : ''}" data-n="${n}">
-      ${m.l2 ? '<span class="tag pill" style="color:var(--accent-2)">⭐ L2</span>' : ''}
-      <div class="icon">${m.i}</div><h3>${m.t}</h3><p class="muted" style="margin:0">${m.d.split('.')[0]}.</p></div>`).join('');
+      ${m.l2 ? '<span class="tag pill" style="color:var(--accent-2)">Advanced</span>' : ''}
+      <div class="icon">${ic(m.i)}</div><h3>${m.t}</h3><p class="muted" style="margin:0">${m.d.split('.')[0]}.</p></div>`).join('');
     document.querySelectorAll('#fmenu .card').forEach(c => c.onclick = () => {
       const m = MENU[c.dataset.n];
-      openModal({ icon: m.i, title: 'Filter › ' + m.t, html: `<p>${m.d}</p><div class="box tip"><strong>💡 Tip</strong>Convert your layer to a Smart Object first so you can change the filter later.</div>` });
+      openModal({ icon: m.i, title: 'Filter › ' + m.t, html: `<p>${m.d}</p><div class="box tip"><strong>${ic('bulb')} Tip</strong>Convert your layer to a Smart Object first so you can change the filter later.</div>` });
     });
   </script>
 </body>

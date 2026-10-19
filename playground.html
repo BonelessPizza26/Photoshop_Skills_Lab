@@ -39,7 +39,7 @@
   <header class="page-hero" style="padding-bottom:20px">
     <div class="blob b1"></div><div class="blob b3"></div>
     <div class="container">
-      <span class="emoji">🎨</span>
+      <span class="emoji"><i data-i="palette"></i></span>
       <h1>The <span class="grad-text">Playground</span></h1>
       <p class="muted" style="max-width:700px;margin:0 auto">A mini Photoshop in your browser. Pick a tool on the left, change its settings in the Options Bar, and try the challenges on the right. Shortcut keys work too!</p>
     </div>
@@ -110,35 +110,35 @@
 
       <!-- ===== INFO PANEL ===== -->
       <aside class="ps-info">
-        <h3 id="ti-title">🖌️ Brush Tool</h3>
+        <h3 id="ti-title">Brush Tool</h3>
         <div class="how" id="ti-how"></div>
 
         <div class="side-block">
-          <h4>Colours</h4>
+          <h4><i data-i="palette"></i> Colours</h4>
           <div style="display:flex;align-items:center;gap:14px">
             <div class="swatches">
               <label class="swatch" id="fg-sw" data-tip="Foreground"><input type="color" id="fg"></label>
               <label class="swatch" id="bg-sw" data-tip="Background"><input type="color" id="bg"></label>
             </div>
             <div style="display:flex;flex-direction:column;gap:6px">
-              <button class="btn btn-small" data-cmd="swap">⇄ Swap <kbd>X</kbd></button>
-              <button class="btn btn-small" data-cmd="resetcol">⬛⬜ Reset <kbd>D</kbd></button>
+              <button class="btn btn-small" data-cmd="swap"><i data-i="swap"></i> Swap <kbd>X</kbd></button>
+              <button class="btn btn-small" data-cmd="resetcol"><i data-i="refresh"></i> Reset <kbd>D</kbd></button>
             </div>
           </div>
         </div>
 
         <div class="side-block">
-          <h4>Adjustments</h4>
+          <h4><i data-i="tune"></i> Adjustments</h4>
           <p class="muted" style="font-size:.82rem;margin:0 0 6px">Works on the selection (or the whole image if nothing is selected).</p>
           <div class="controls" id="adj"></div>
           <div class="mini-grid" style="margin-top:10px">
-            <button class="btn btn-small btn-primary" id="adj-apply">✓ Apply</button>
-            <button class="btn btn-small" id="adj-cancel">✕ Cancel</button>
+            <button class="btn btn-small btn-primary" id="adj-apply"><i data-i="check"></i> Apply</button>
+            <button class="btn btn-small" id="adj-cancel"><i data-i="close"></i> Cancel</button>
           </div>
         </div>
 
         <div class="side-block">
-          <h4>🏆 Challenges</h4>
+          <h4><i data-i="trophy"></i> Challenges</h4>
           <div id="challenges"></div>
         </div>
       </aside>
@@ -146,10 +146,11 @@
   </section>
 
   <section class="container" style="padding-top:20px">
-    <div class="box info"><strong>ℹ️ About the Playground</strong>This is a simplified version of Photoshop for practice. It has one layer, so it works like editing the Background layer. Real Photoshop has many more settings – use what you learn here to experiment there! Best in Chrome or Edge.</div>
+    <div class="box info"><strong><i data-i="info"></i> About the Playground</strong>This is a simplified version of Photoshop for practice. It has one layer, so it works like editing the Background layer. Real Photoshop has many more settings – use what you learn here to experiment there! Best in Chrome or Edge.</div>
     <div style="text-align:center;margin-top:20px"><button class="btn learn-btn" data-id="playground">Mark as learnt</button></div>
   </section>
 
+  <script src="js/icons.js"></script>
   <script src="js/main.js"></script>
   <script src="js/playground.js"></script>
 </body>

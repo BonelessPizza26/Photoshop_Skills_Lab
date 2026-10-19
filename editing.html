@@ -11,14 +11,14 @@
   <header class="page-hero">
     <div class="blob b2"></div><div class="blob b3"></div>
     <div class="container">
-      <span class="emoji">🖼️</span>
+      <span class="emoji"><i data-i="editing"></i></span>
       <h1>Image <span class="grad-text">Editing</span></h1>
       <p class="muted" style="max-width:660px;margin:0 auto">Crop, rotate, fix colour and light, and change images completely. Every section has something to try.</p>
       <div class="chips" style="margin-top:24px">
-        <a class="chip" href="#transform">🔄 Rotate &amp; Transform</a>
-        <a class="chip" href="#crop">⛶ Crop</a>
-        <a class="chip" href="#adjust">🎚️ Colour &amp; Light</a>
-        <a class="chip" href="#manip">🪄 Manipulation</a>
+        <a class="chip" href="#transform"><i data-i="rotate"></i> Rotate &amp; Transform</a>
+        <a class="chip" href="#crop"><i data-i="crop"></i> Crop</a>
+        <a class="chip" href="#adjust"><i data-i="tune"></i> Colour &amp; Light</a>
+        <a class="chip" href="#manip"><i data-i="wand"></i> Manipulation</a>
       </div>
     </div>
   </header>
@@ -27,16 +27,16 @@
   <section class="container" id="transform">
     <div class="demo-grid">
       <div class="reveal">
-        <h2>🔄 Rotate, flip &amp; Free Transform</h2>
+        <h2><span class="section-icon"><i data-i="rotate"></i> Rotate, flip &amp; Free Transform</span></h2>
         <p><strong>Rotate the whole image:</strong> Image › Image Rotation › 90° Clockwise, 180°, Flip Canvas Horizontal…</p>
         <p><strong>Transform one layer:</strong> select the layer and press <kbd>Ctrl</kbd>+<kbd>T</kbd> (Free Transform). A box with handles appears.</p>
         <ul>
           <li>Drag a <strong>corner</strong> to resize (it keeps the proportions).</li>
-          <li>Move the mouse just <strong>outside</strong> a corner to rotate (the cursor bends ↻).</li>
+          <li>Move the mouse just <strong>outside</strong> a corner to rotate (the cursor turns into a curved arrow).</li>
           <li>Right-click inside the box for <strong>Flip</strong>, <strong>Skew</strong>, <strong>Distort</strong>, <strong>Perspective</strong> and <strong>Warp</strong>.</li>
           <li>Press <kbd>Enter</kbd> to apply, <kbd>Esc</kbd> to cancel.</li>
         </ul>
-        <div class="box warn"><strong>⚠️ Watch out</strong>Making a photo bigger than it really is makes it blurry and “pixelated”. Shrinking is fine.</div>
+        <div class="box warn"><strong><i data-i="alert"></i> Watch out</strong>Making a photo bigger than it really is makes it blurry and “pixelated”. Shrinking is fine.</div>
         <div class="l2">Convert a layer to a <strong>Smart Object</strong> first (right-click layer › Convert to Smart Object). You can then scale it down and back up again without losing quality, because Photoshop remembers the original pixels.</div>
       </div>
       <div class="demo reveal">
@@ -49,10 +49,10 @@
           <label>Skew <span id="t-sk-v">0°</span></label>
           <input type="range" id="t-sk" min="-40" max="40" value="0">
           <div class="btn-row">
-            <button class="btn btn-small" id="t-fh">↔ Flip Horizontal</button>
-            <button class="btn btn-small" id="t-fv">↕ Flip Vertical</button>
-            <button class="btn btn-small" id="t-90">↻ 90°</button>
-            <button class="btn btn-small" id="t-reset">Reset</button>
+            <button class="btn btn-small" id="t-fh"><i data-i="flip-h"></i> Flip Horizontal</button>
+            <button class="btn btn-small" id="t-fv"><i data-i="flip-v"></i> Flip Vertical</button>
+            <button class="btn btn-small" id="t-90"><i data-i="rotate"></i> 90°</button>
+            <button class="btn btn-small" id="t-reset"><i data-i="refresh"></i> Reset</button>
           </div>
         </div>
       </div>
@@ -72,15 +72,15 @@
           <button class="btn btn-small ratio" data-r="1">1:1 Square</button>
           <button class="btn btn-small ratio" data-r="1.7778">16:9</button>
           <button class="btn btn-small ratio" data-r="0.8">4:5 Portrait</button>
-          <button class="btn btn-small btn-primary" id="crop-go">✂️ Crop!</button>
+          <button class="btn btn-small btn-primary" id="crop-go"><i data-i="scissors"></i> Crop!</button>
         </div>
         <div id="crop-result" style="margin-top:14px"></div>
       </div>
       <div class="reveal">
-        <h2>⛶ Cropping &amp; composition</h2>
+        <h2><span class="section-icon"><i data-i="crop"></i> Cropping &amp; composition</span></h2>
         <p>Cropping removes the edges of a photo. It can make a picture much stronger by cutting out distractions.</p>
         <p><strong>Try it:</strong> drag the box on the image to move it. Pick a ratio, then press <em>Crop!</em></p>
-        <div class="box tip"><strong>📐 Rule of thirds</strong>The grid splits the image into 9 boxes. Put important things (the sun, the boat, a horizon) on the lines or where they cross – it looks more natural than putting everything in the middle.</div>
+        <div class="box tip"><strong><i data-i="grid"></i> Rule of thirds</strong>The grid splits the image into 9 boxes. Put important things (the sun, the boat, a horizon) on the lines or where they cross – it looks more natural than putting everything in the middle.</div>
         <div class="l2">In Photoshop, the Crop tool’s Options Bar has other overlays: Golden Ratio, Diagonal and Triangle. Use the <strong>Perspective Crop</strong> tool to straighten photos of posters or screens taken at an angle.</div>
       </div>
     </div>
@@ -89,8 +89,8 @@
   <!-- ===== ADJUSTMENTS ===== -->
   <section class="container" id="adjust">
     <div class="section-title reveal">
-      <h2>🎚️ Colour &amp; light adjustments</h2>
-      <p>Find these in <strong>Image › Adjustments</strong> – or better, as <strong>Adjustment Layers</strong> (the half-black/half-white circle at the bottom of the Layers panel).</p>
+      <h2><span class="section-icon"><i data-i="tune"></i> Colour &amp; light adjustments</span></h2>
+      <p>Find these in <strong>Image › Adjustments</strong> – or better, as <strong>Adjustment Layers</strong> (the half-black/half-white circle <i data-i="circle-half"></i> at the bottom of the Layers panel).</p>
     </div>
     <div class="demo reveal">
       <div class="demo-grid">
@@ -102,17 +102,17 @@
             <div class="handle"></div>
             <input type="range" min="0" max="100" value="50" aria-label="Before/after slider">
           </div>
-          <p class="muted center" style="font-size:.9rem;margin-top:8px">↔ Drag across the image to compare before and after</p>
+          <p class="muted center" style="font-size:.9rem;margin-top:8px"><i data-i="swap"></i> Drag across the image to compare before and after</p>
         </div>
         <div class="controls" id="adj-controls"></div>
       </div>
       <div class="btn-row" style="justify-content:center;margin-top:16px">
-        <button class="btn btn-small preset" data-p="vintage">📻 Vintage</button>
-        <button class="btn btn-small preset" data-p="bw">⚫ Black &amp; White</button>
-        <button class="btn btn-small preset" data-p="cool">❄️ Cool</button>
-        <button class="btn btn-small preset" data-p="punchy">🔥 Punchy</button>
-        <button class="btn btn-small preset" data-p="night">🌙 Night</button>
-        <button class="btn btn-small" id="adj-reset">↺ Reset</button>
+        <button class="btn btn-small preset" data-p="vintage"><i data-i="vintage"></i> Vintage</button>
+        <button class="btn btn-small preset" data-p="bw"><i data-i="bw"></i> Black &amp; White</button>
+        <button class="btn btn-small preset" data-p="cool"><i data-i="snowflake"></i> Cool</button>
+        <button class="btn btn-small preset" data-p="punchy"><i data-i="fire"></i> Punchy</button>
+        <button class="btn btn-small preset" data-p="night"><i data-i="moon"></i> Night</button>
+        <button class="btn btn-small" id="adj-reset"><i data-i="refresh"></i> Reset</button>
       </div>
     </div>
 
@@ -122,35 +122,35 @@
   <!-- ===== MANIPULATION ===== -->
   <section class="container" id="manip">
     <div class="section-title reveal">
-      <h2>🪄 Photo manipulation</h2>
+      <h2><span class="section-icon"><i data-i="wand"></i> Photo manipulation</span></h2>
       <p>Manipulation means changing a photo so it shows something that wasn’t really there. Open each section for the steps.</p>
     </div>
-    <details class="acc reveal"><summary>✂️ Cutting out an object (removing a background)</summary><div class="acc-body">
+    <details class="acc reveal"><summary><i data-i="scissors"></i> Cutting out an object (removing a background)</summary><div class="acc-body">
       <ol><li>Open your photo and duplicate the layer (<kbd>Ctrl</kbd>+<kbd>J</kbd>).</li>
       <li>Use <strong>Select › Subject</strong>, or the Quick Selection / Object Selection tool.</li>
       <li>Fix bits it missed: hold <kbd>Shift</kbd> to add, <kbd>Alt</kbd> to remove.</li>
       <li>Click the <strong>Add Layer Mask</strong> button at the bottom of the Layers panel. The background disappears!</li>
-      <li>Hide the original layer (click its 👁️).</li></ol>
+      <li>Hide the original layer (click its eye icon <i data-i="eye"></i>).</li></ol>
       <div class="l2"><strong>Select › Select and Mask</strong> has a Refine Edge brush – paint over hair and fur for a much cleaner cut-out. Set Output to “New Layer with Layer Mask”.</div>
     </div></details>
-    <details class="acc reveal"><summary>🧩 Compositing (combining images)</summary><div class="acc-body">
+    <details class="acc reveal"><summary><i data-i="puzzle"></i> Compositing (combining images)</summary><div class="acc-body">
       <ol><li>Cut out the object you want (see above).</li>
       <li>Drag it with the Move tool onto the tab of your other image.</li>
       <li>Resize it with <kbd>Ctrl</kbd>+<kbd>T</kbd> so it fits the scene.</li>
       <li>Match the colour and light with a Curves or Colour Balance adjustment clipped to it (<kbd>Alt</kbd>+click between the layers).</li>
       <li>Add a soft black shadow on a new layer underneath it.</li></ol>
-      <div class="box tip"><strong>💡 Make it believable</strong>Check: does the light come from the same direction? Is the size realistic? Does it have a shadow?</div>
+      <div class="box tip"><strong><i data-i="bulb"></i> Make it believable</strong>Check: does the light come from the same direction? Is the size realistic? Does it have a shadow?</div>
     </div></details>
-    <details class="acc reveal"><summary>🧽 Removing unwanted things</summary><div class="acc-body">
+    <details class="acc reveal"><summary><i data-i="eraser"></i> Removing unwanted things</summary><div class="acc-body">
       <p>Small marks: <strong>Spot Healing Brush</strong> (<kbd>J</kbd>). Repeating patterns or edges: <strong>Clone Stamp</strong> (<kbd>S</kbd>). Bigger objects: select around them with the Lasso, then <strong>Edit › Content-Aware Fill</strong>.</p>
       <div class="l2"><strong>Generative Fill</strong> (in newer versions) uses AI to fill a selection from a text prompt. If you use it in coursework, record it in your log – it is not your own photography or drawing.</div>
     </div></details>
-    <details class="acc reveal"><summary>🌀 Warp &amp; Liquify</summary><div class="acc-body">
+    <details class="acc reveal"><summary><i data-i="swirl"></i> Warp &amp; Liquify</summary><div class="acc-body">
       <p><strong>Edit › Transform › Warp</strong> lets you bend a layer with a grid – great for wrapping a logo around a mug.</p>
       <p><strong>Filter › Liquify</strong> lets you push pixels like wet paint – the Forward Warp tool pushes, Bloat makes things bigger, Pucker makes them smaller.</p>
-      <div class="box warn"><strong>⚠️ Ethics</strong>Changing people’s faces and bodies can be harmful and misleading. Talk about this in your evaluation if you edit people.</div>
+      <div class="box warn"><strong><i data-i="alert"></i> Ethics</strong>Changing people’s faces and bodies can be harmful and misleading. Talk about this in your evaluation if you edit people.</div>
     </div></details>
-    <details class="acc reveal"><summary>🎭 Double exposure effect</summary><div class="acc-body">
+    <details class="acc reveal"><summary><i data-i="masks"></i> Double exposure effect</summary><div class="acc-body">
       <ol><li>Put a portrait on the bottom layer and a landscape on the top layer.</li>
       <li>Change the top layer’s <strong>blend mode</strong> to <strong>Screen</strong> or <strong>Lighten</strong>.</li>
       <li>Add a layer mask to the landscape and paint black with a soft brush to hide parts of it.</li></ol>
@@ -159,6 +159,7 @@
     <div style="text-align:center;margin-top:30px"><button class="btn learn-btn" data-id="editing">Mark as learnt</button></div>
   </section>
 
+  <script src="js/icons.js"></script>
   <script src="js/main.js"></script>
   <script>
     const $ = id => document.getElementById(id);
@@ -223,7 +224,7 @@
         c.style.cssText = 'max-width:100%;max-height:260px;border-radius:10px;display:block;margin:auto';
         $('crop-result').innerHTML = '<p class="center muted" style="margin:0 0 6px">Your cropped image:</p>';
         $('crop-result').appendChild(c);
-        toast('✂️ Cropped!');
+        toast('Cropped!', 'scissors');
       };
       img.src = 'images/sample.svg';
     };
@@ -260,25 +261,25 @@
     function resetAdj() { ADJ.forEach(a => $(a.id).value = a.def); applyAdj(); }
     document.querySelectorAll('.preset').forEach(b => b.onclick = () => {
       resetAdj(); Object.entries(PRESETS[b.dataset.p]).forEach(([k, v]) => $(k).value = v); applyAdj();
-      toast(b.textContent.trim() + ' look applied');
+      toast(b.textContent.trim() + ' look applied', 'palette');
     });
     $('adj-reset').onclick = resetAdj;
     applyAdj();
 
     const cards = [
-      { i: '☀️', t: 'Brightness/Contrast', d: 'The simplest fix. Brightness = lighter/darker. Contrast = difference between light and dark.' },
-      { i: '📊', t: 'Levels', d: 'Drag the black, grey and white sliders under the graph (histogram) to fix dull, grey photos.', l2: 'The histogram shows how many pixels are dark (left) to light (right). A gap at either end means the image has no true blacks or whites.' },
-      { i: '〰️', t: 'Curves', d: 'The most powerful light tool. Drag the line up to brighten, down to darken. An S-shape adds contrast.', l2: 'You can edit Red, Green and Blue curves separately to colour-grade a photo – e.g. lift blue in the shadows for a cinematic look.' },
-      { i: '🌈', t: 'Hue/Saturation', d: 'Hue changes the colours. Saturation = how strong colours are. Lightness = lighter or darker.', l2: 'Pick one colour from the drop-down (e.g. Reds) to change only that colour – turn a red car blue!' },
-      { i: '⚖️', t: 'Colour Balance', d: 'Push the colours towards cyan/red, magenta/green or yellow/blue to warm up or cool down a photo.' },
-      { i: '⚫', t: 'Black & White', d: 'Makes a black and white image, with sliders that control how light each original colour turns.' }
+      { i: 'sun', t: 'Brightness/Contrast', d: 'The simplest fix. Brightness = lighter/darker. Contrast = difference between light and dark.' },
+      { i: 'histogram', t: 'Levels', d: 'Drag the black, grey and white sliders under the graph (histogram) to fix dull, grey photos.', l2: 'The histogram shows how many pixels are dark (left) to light (right). A gap at either end means the image has no true blacks or whites.' },
+      { i: 'curves', t: 'Curves', d: 'The most powerful light tool. Drag the line up to brighten, down to darken. An S-shape adds contrast.', l2: 'You can edit Red, Green and Blue curves separately to colour-grade a photo – e.g. lift blue in the shadows for a cinematic look.' },
+      { i: 'hue', t: 'Hue/Saturation', d: 'Hue changes the colours. Saturation = how strong colours are. Lightness = lighter or darker.', l2: 'Pick one colour from the drop-down (e.g. Reds) to change only that colour – turn a red car blue!' },
+      { i: 'balance', t: 'Colour Balance', d: 'Push the colours towards cyan/red, magenta/green or yellow/blue to warm up or cool down a photo.' },
+      { i: 'bw', t: 'Black & White', d: 'Makes a black and white image, with sliders that control how light each original colour turns.' }
     ];
-    $('adj-cards').innerHTML = cards.map((c, n) => `<div class="card clickable reveal visible" data-n="${n}"><div class="icon">${c.i}</div><h3>${c.t}</h3><p class="muted" style="margin:0">${c.d}</p></div>`).join('');
+    $('adj-cards').innerHTML = cards.map((c, n) => `<div class="card clickable reveal visible" data-n="${n}"><div class="icon">${ic(c.i)}</div><h3>${c.t}</h3><p class="muted" style="margin:0">${c.d}</p></div>`).join('');
     document.querySelectorAll('#adj-cards .card').forEach(el => el.onclick = () => {
       const c = cards[el.dataset.n];
       openModal({ icon: c.i, title: c.t, html: `<p>${c.d}</p>
-        <p><strong>Where:</strong> Layers panel › ◐ button › ${c.t}, or Image › Adjustments › ${c.t}.</p>
-        <div class="box tip"><strong>💡 Why use an Adjustment Layer?</strong>It is <em>non-destructive</em> – your photo isn’t changed. You can re-edit it, hide it or delete it any time.</div>
+        <p><strong>Where:</strong> Layers panel › ${ic('circle-half')} button › ${c.t}, or Image › Adjustments › ${c.t}.</p>
+        <div class="box tip"><strong>${ic('bulb')} Why use an Adjustment Layer?</strong>It is <em>non-destructive</em> – your photo isn’t changed. You can re-edit it, hide it or delete it any time.</div>
         ${c.l2 ? `<div class="l2">${c.l2}</div>` : ''}` });
     });
   </script>

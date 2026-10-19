@@ -83,46 +83,46 @@
   const snap = () => ({ w: W(), h: H(), data: ctx.getImageData(0, 0, W(), H()) });
   function restore(s) { if (s.w !== W() || s.h !== H()) resizeAll(s.w, s.h); ctx.putImageData(s.data, 0, 0); }
   function pushUndo() { commitAdj(); undoStack.push(snap()); if (undoStack.length > 30) undoStack.shift(); redoStack.length = 0; }
-  function undo() { if (adjBase) { cancelAdj(); return toast('↩️ Adjustment cancelled'); } if (!undoStack.length) return toast('Nothing to undo'); redoStack.push(snap()); restore(undoStack.pop()); toast('↩️ Undo'); }
-  function redo() { if (!redoStack.length) return toast('Nothing to redo'); undoStack.push(snap()); restore(redoStack.pop()); toast('↪️ Redo'); }
+  function undo() { if (adjBase) { cancelAdj(); return toast('Adjustment cancelled', 'undo'); } if (!undoStack.length) return toast('Nothing to undo', 'undo'); redoStack.push(snap()); restore(undoStack.pop()); toast('Undo', 'undo'); }
+  function redo() { if (!redoStack.length) return toast('Nothing to redo', 'redo'); undoStack.push(snap()); restore(redoStack.pop()); toast('Redo', 'redo'); }
 
   /* ================= 4. TOOL LIST & UI ================= */
   const TOOLS = [
-    { id: 'move', icon: '✥', name: 'Move Tool', key: 'V', opts: [],
+    { id: 'move', icon: 'move', name: 'Move Tool', key: 'V', opts: [],
       how: 'Drag to move the <strong>selected pixels</strong>. With no selection, the whole image moves (leaving transparent pixels behind – the checkerboard).<br><br>Try: make a selection around the boat, then drag it somewhere else.' },
-    { id: 'marquee', icon: '⬚', name: 'Marquee Tool', key: 'M', opts: ['marquee', 'selMode'],
+    { id: 'marquee', icon: 'marquee', name: 'Marquee Tool', key: 'M', opts: ['marquee', 'selMode'],
       how: 'Drag to draw a selection. <strong>Shift</strong> = add to it, <strong>Alt</strong> = take away. <kbd>Ctrl</kbd>+<kbd>D</kbd> deselects.<br><br>Anything you do next (paint, fill, filters, adjustments) only happens <em>inside</em> the selection.' },
-    { id: 'lasso', icon: '➰', name: 'Lasso Tool', key: 'L', opts: ['lasso', 'selMode'],
+    { id: 'lasso', icon: 'lasso', name: 'Lasso Tool', key: 'L', opts: ['lasso', 'selMode'],
       how: '<strong>Freehand:</strong> hold the mouse and draw round an object.<br><strong>Polygonal:</strong> click from corner to corner, then click the first point (or double-click) to finish. <kbd>Esc</kbd> cancels.' },
-    { id: 'wand', icon: '🪄', name: 'Magic Wand', key: 'W', opts: ['tol', 'contiguous', 'selMode'],
+    { id: 'wand', icon: 'wand', name: 'Magic Wand', key: 'W', opts: ['tol', 'contiguous', 'selMode'],
       how: 'Click a colour to select it. <strong>Tolerance</strong> controls how similar colours must be: low = fussy, high = selects more.<br><br>Try: click the sun with tolerance 40, then use Adjustments › Hue.' },
-    { id: 'crop', icon: '⛶', name: 'Crop Tool', key: 'C', opts: ['ratio', 'cropBtns'],
-      how: 'Drag a box over the part you want to keep, then press <kbd>Enter</kbd> or ✓ Apply. Use the grid lines to follow the <strong>rule of thirds</strong>.' },
-    { id: 'eyedropper', icon: '💧', name: 'Eyedropper', key: 'I', opts: [],
+    { id: 'crop', icon: 'crop', name: 'Crop Tool', key: 'C', opts: ['ratio', 'cropBtns'],
+      how: 'Drag a box over the part you want to keep, then press <kbd>Enter</kbd> or the Apply button. Use the grid lines to follow the <strong>rule of thirds</strong>.' },
+    { id: 'eyedropper', icon: 'eyedropper', name: 'Eyedropper', key: 'I', opts: [],
       how: 'Click anywhere on the image to pick up that colour as your foreground colour.<br><br>Shortcut: while using the Brush, hold <kbd>Alt</kbd> and click.' },
-    { id: 'brush', icon: '🖌️', name: 'Brush Tool', key: 'B', opts: ['size', 'hard', 'op', 'flow'],
+    { id: 'brush', icon: 'brush', name: 'Brush Tool', key: 'B', opts: ['size', 'hard', 'op', 'flow'],
       how: 'Paint with the foreground colour. <kbd>[</kbd> and <kbd>]</kbd> change the size. Number keys set opacity (5 = 50%, 0 = 100%).<br><br><strong>Hardness</strong> 0% = soft edge. <strong>Opacity</strong> limits each stroke. <strong>Flow</strong> builds up slowly.' },
-    { id: 'pencil', icon: '✏️', name: 'Pencil Tool', key: 'B', opts: ['size', 'op'],
+    { id: 'pencil', icon: 'pencil', name: 'Pencil Tool', key: 'B', opts: ['size', 'op'],
       how: 'Hard-edged square pixels – perfect for pixel art. Zoom in (View menu) and set size to 4–10 px.' },
-    { id: 'eraser', icon: '🧽', name: 'Eraser Tool', key: 'E', opts: ['size', 'hard', 'op', 'flow'],
+    { id: 'eraser', icon: 'eraser', name: 'Eraser Tool', key: 'E', opts: ['size', 'hard', 'op', 'flow'],
       how: 'Removes pixels to show transparency (checkerboard). Low opacity fades things gently.<br><br>Pro tip: in real Photoshop, a Layer Mask is safer than erasing.' },
-    { id: 'bucket', icon: '🪣', name: 'Paint Bucket', key: 'G', opts: ['tol', 'contiguous', 'op'],
+    { id: 'bucket', icon: 'bucket', name: 'Paint Bucket', key: 'G', opts: ['tol', 'contiguous', 'op'],
       how: 'Click an area to fill similar colours with the foreground colour. Tolerance works like the Magic Wand.<br><br>Press <kbd>G</kbd> again to switch to the Gradient tool.' },
-    { id: 'gradient', icon: '🌈', name: 'Gradient Tool', key: 'G', opts: ['op'],
+    { id: 'gradient', icon: 'gradient', name: 'Gradient Tool', key: 'G', opts: ['op'],
       how: 'Drag across the image. It blends from the <strong>foreground</strong> to the <strong>background</strong> colour. A short drag = a sharp change, a long drag = a smooth blend.<br><br>Try: select the sky with the Magic Wand first!' },
-    { id: 'clone', icon: '🧬', name: 'Clone Stamp', key: 'S', opts: ['size', 'hard', 'op', 'cloneBtn'],
+    { id: 'clone', icon: 'clone', name: 'Clone Stamp', key: 'S', opts: ['size', 'hard', 'op', 'cloneBtn'],
       how: '<strong>Step 1:</strong> hold <kbd>Alt</kbd> (Mac: <kbd>Option</kbd>) and click the area to copy FROM – or press “Pick source”.<br><strong>Step 2:</strong> paint somewhere else. A + shows where it is copying from.<br><br>Try: remove the boat by cloning the water over it.' },
-    { id: 'heal', icon: '🩹', name: 'Spot Healing Brush', key: 'J', opts: ['size'],
+    { id: 'heal', icon: 'heal', name: 'Spot Healing Brush', key: 'J', opts: ['size'],
       how: 'Paint over a small object or mark (it turns red). When you let go, Photoshop fills it in using the pixels around it.<br><br>Try: remove the birds or the tree!' },
-    { id: 'blur', icon: '💨', name: 'Blur Tool', key: '', opts: ['size', 'op'],
+    { id: 'blur', icon: 'blur', name: 'Blur Tool', key: '', opts: ['size', 'op'],
       how: 'Paint to soften areas. Higher opacity = stronger blur. Paint over the same place to blur more.' },
-    { id: 'dodge', icon: '🌗', name: 'Dodge / Burn / Sponge', key: 'O', opts: ['dodge', 'size', 'op'],
+    { id: 'dodge', icon: 'dodge', name: 'Dodge / Burn / Sponge', key: 'O', opts: ['dodge', 'size', 'op'],
       how: '<strong>Dodge</strong> lightens, <strong>Burn</strong> darkens, <strong>Sponge</strong> adds or removes colour. Use a low opacity and build it up.' },
-    { id: 'text', icon: '🅃', name: 'Type Tool', key: 'T', opts: ['text', 'font', 'fontSize', 'op'],
+    { id: 'text', icon: 'text', name: 'Type Tool', key: 'T', opts: ['text', 'font', 'fontSize', 'op'],
       how: 'Type your words in the Options Bar, choose a font and size, then click on the image to place the text. It uses the foreground colour.' },
-    { id: 'shape', icon: '⬟', name: 'Shape Tool', key: 'U', opts: ['shape', 'fillShape', 'size', 'op'],
+    { id: 'shape', icon: 'shape', name: 'Shape Tool', key: 'U', opts: ['shape', 'fillShape', 'size', 'op'],
       how: 'Drag to draw a shape in the foreground colour. Hold <kbd>Shift</kbd> for a perfect square or circle. Untick “Fill” for an outline (size = line thickness).' },
-    { id: 'zoom', icon: '🔍', name: 'Zoom Tool', key: 'Z', opts: ['zoomBtns'],
+    { id: 'zoom', icon: 'zoom', name: 'Zoom Tool', key: 'Z', opts: ['zoomBtns'],
       how: 'Click to zoom in. <kbd>Alt</kbd>+click zooms out. Scroll the image area to move around. Zooming never changes your image.' }
   ];
   const tool = () => TOOLS.find(t => t.id === S.tool);
@@ -137,17 +137,17 @@
     fontSize: () => `<label class="opt">Size <input type="range" data-o="fontSize" min="10" max="200" value="${S.fontSize}"><output>${S.fontSize}pt</output></label>`,
     contiguous: () => `<label class="opt"><input type="checkbox" data-o="contiguous" ${S.contiguous ? 'checked' : ''}> Contiguous</label>`,
     fillShape:  () => `<label class="opt"><input type="checkbox" data-o="fillShape" ${S.fillShape ? 'checked' : ''}> Fill</label>`,
-    marquee: () => sel_('marquee', [['rect', '▭ Rectangle'], ['ellipse', '◯ Ellipse']]),
-    lasso:   () => sel_('lasso', [['free', '➰ Freehand'], ['poly', '⬠ Polygonal']]),
-    selMode: () => sel_('selMode', [['new', 'New selection'], ['add', '＋ Add (Shift)'], ['sub', '－ Subtract (Alt)']]),
-    shape:   () => sel_('shape', [['rect', '▭ Rectangle'], ['ellipse', '◯ Ellipse'], ['tri', '△ Triangle'], ['line', '╱ Line']]),
-    dodge:   () => sel_('dodge', [['dodge', '☀️ Dodge (lighten)'], ['burn', '🔥 Burn (darken)'], ['sat', '🌈 Sponge – saturate'], ['desat', '⚪ Sponge – desaturate']]),
+    marquee: () => sel_('marquee', [['rect', 'Rectangle'], ['ellipse', 'Ellipse']]),
+    lasso:   () => sel_('lasso', [['free', 'Freehand lasso'], ['poly', 'Polygonal lasso']]),
+    selMode: () => sel_('selMode', [['new', 'New selection'], ['add', 'Add (Shift)'], ['sub', 'Subtract (Alt)']]),
+    shape:   () => sel_('shape', [['rect', 'Rectangle'], ['ellipse', 'Ellipse'], ['tri', 'Triangle'], ['line', 'Line']]),
+    dodge:   () => sel_('dodge', [['dodge', 'Dodge (lighten)'], ['burn', 'Burn (darken)'], ['sat', 'Sponge – saturate'], ['desat', 'Sponge – desaturate']]),
     font:    () => sel_('font', [['Poppins', 'Poppins'], ['Inter', 'Inter'], ['Georgia', 'Georgia (serif)'], ['Impact', 'Impact'], ['Courier New', 'Courier'], ['Comic Sans MS', 'Comic Sans']]),
     ratio:   () => sel_('ratio', [['0', 'Free ratio'], ['1', '1:1 square'], ['1.7778', '16:9'], ['0.8', '4:5'], ['1.5', '3:2']]),
     text:    () => `<label class="opt">Text <input type="text" data-o="text" value="${S.text.replace(/"/g, '&quot;')}" style="width:160px"></label>`,
-    cropBtns: () => `<button class="btn btn-small btn-primary" data-cmd="cropApply">✓ Apply</button><button class="btn btn-small" data-cmd="cropCancel">✕ Cancel</button>`,
-    cloneBtn: () => `<button class="btn btn-small ${newSource ? 'is-on' : ''}" data-cmd="pickSource">🎯 Pick source</button><span class="muted">${cloneSrc ? 'Source set ✓' : 'No source yet'}</span>`,
-    zoomBtns: () => `<button class="btn btn-small" data-cmd="zin">＋</button><button class="btn btn-small" data-cmd="zout">－</button><button class="btn btn-small" data-cmd="zfit">Fit</button>`
+    cropBtns: () => `<button class="btn btn-small btn-primary" data-cmd="cropApply">${ic('check')} Apply</button><button class="btn btn-small" data-cmd="cropCancel">${ic('close')} Cancel</button>`,
+    cloneBtn: () => `<button class="btn btn-small ${newSource ? 'is-on' : ''}" data-cmd="pickSource">${ic('target')} Pick source</button><span class="muted">${cloneSrc ? 'Source set' : 'No source yet'}</span>`,
+    zoomBtns: () => `<button class="btn btn-small" data-cmd="zin">${ic('zoom')}</button><button class="btn btn-small" data-cmd="zout">${ic('zoom-out')}</button><button class="btn btn-small" data-cmd="zfit">Fit</button>`
   };
   function sel_(key, list) {
     return `<label class="opt"><select data-o="${key}" style="width:auto">${list.map(([v, l]) =>
@@ -156,7 +156,7 @@
 
   function buildToolbar() {
     $('toolbar').innerHTML = TOOLS.map(t =>
-      `<button data-tool="${t.id}" data-tip="${t.name}${t.key ? ' (' + t.key + ')' : ''}" aria-label="${t.name}">${t.icon}</button>`).join('');
+      `<button data-tool="${t.id}" data-tip="${t.name}${t.key ? ' (' + t.key + ')' : ''}" aria-label="${t.name}">${ic(t.icon)}</button>`).join('');
     $('toolbar').querySelectorAll('button').forEach(b => b.onclick = () => setTool(b.dataset.tool));
   }
   function setTool(id) {
@@ -164,7 +164,7 @@
     S.tool = id; preview = null;
     const t = tool();
     $('toolbar').querySelectorAll('button').forEach(b => b.classList.toggle('active', b.dataset.tool === id));
-    $('ti-title').innerHTML = `${t.icon} ${t.name} ${t.key ? `<kbd>${t.key}</kbd>` : ''}`;
+    $('ti-title').innerHTML = `${ic(t.icon)} ${t.name} ${t.key ? `<kbd>${t.key}</kbd>` : ''}`;
     $('ti-how').innerHTML = t.how;
     buildOptions();
     ov.style.cursor = { move: 'move', zoom: 'zoom-in', text: 'text', eyedropper: 'copy' }[id] || 'crosshair';
@@ -172,7 +172,7 @@
   }
   function buildOptions() {
     const t = tool();
-    $('options').innerHTML = `<strong style="margin-right:4px">${t.icon} ${t.name}</strong>` + (t.opts.map(o => OPT[o]()).join('') || '<span class="muted">No options for this tool</span>');
+    $('options').innerHTML = `<strong style="margin-right:4px;display:flex;align-items:center;gap:6px">${ic(t.icon)} ${t.name}</strong>` + (t.opts.map(o => OPT[o]()).join('') || '<span class="muted">No options for this tool</span>');
     $('options').querySelectorAll('[data-o]').forEach(inp => {
       const k = inp.dataset.o;
       inp.addEventListener('input', () => {
@@ -192,9 +192,9 @@
     if (S.tool === 'clone') {
       if (e.altKey || newSource) {
         cloneSrc = { ...p }; newSource = false; cloneOff = null; buildOptions();
-        toast('🎯 Source set – now paint somewhere else'); return false;
+        toast('Source set – now paint somewhere else', 'target'); return false;
       }
-      if (!cloneSrc) { toast('First Alt+click (or press “Pick source”) to choose where to copy from'); return false; }
+      if (!cloneSrc) { toast('First Alt+click (or press “Pick source”) to choose where to copy from', 'clone'); return false; }
       if (!cloneOff) cloneOff = { x: cloneSrc.x - p.x, y: cloneSrc.y - p.y };
     }
     if ((S.tool === 'brush' || S.tool === 'pencil') && e.altKey) { pickColour(p); return false; }
@@ -289,7 +289,7 @@
     }
     list.forEach(j => { const nz = (Math.random() - .5) * 10; for (let c = 0; c < 3; c++) d[j + c] = f[j + c] + nz; d[j + 3] = f[j + 3]; });
     ctx.putImageData(img, 0, 0);
-    toast('🩹 Healed!');
+    toast('Healed!', 'heal');
   }
 
   /* ================= 6. SELECTION TOOLS ================= */
@@ -419,19 +419,19 @@
     return r;
   }
   function cropApply() {
-    if (!cropBox || cropBox.w < 4 || cropBox.h < 4) return toast('Drag a crop box first');
+    if (!cropBox || cropBox.w < 4 || cropBox.h < 4) return toast('Drag a crop box first', 'crop');
     pushUndo();
     const r = { x: Math.round(cropBox.x), y: Math.round(cropBox.y), w: Math.round(cropBox.w), h: Math.round(cropBox.h) };
     const data = ctx.getImageData(r.x, r.y, r.w, r.h);
     resizeAll(r.w, r.h); ctx.putImageData(data, 0, 0);
     cropBox = null; preview = null; drawOverlay(); drawAnts();
-    toast(`✂️ Cropped to ${r.w} × ${r.h} px`);
+    toast(`Cropped to ${r.w} × ${r.h} px`, 'crop');
   }
   function pickColour(p) {
     const [r, g, b, a] = ctx.getImageData(Math.floor(p.x), Math.floor(p.y), 1, 1).data;
-    if (a === 0) return toast('That pixel is transparent');
+    if (a === 0) return toast('That pixel is transparent', 'eyedropper');
     S.fg = '#' + [r, g, b].map(v => v.toString(16).padStart(2, '0')).join('');
-    paintSwatches(); toast('💧 Picked ' + S.fg.toUpperCase());
+    paintSwatches(); toast('Picked ' + S.fg.toUpperCase(), 'eyedropper');
   }
   const ZOOMS = [.5, .75, 1, 1.5, 2, 3, 4, 6];
   function zoom(dir) {
@@ -612,12 +612,12 @@
 
   const CMDS = {
     undo, redo,
-    new: () => { pushUndo(); resizeAll(800, 500); ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, 800, 500); toast('📄 New blank canvas'); },
+    new: () => { pushUndo(); resizeAll(800, 500); ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, 800, 500); toast('New blank canvas', 'plus'); },
     open: () => $('file-in').click(),
-    sample: () => { pushUndo(); loadSample(); toast('🖼️ Sample image loaded'); },
-    save: () => { const a = document.createElement('a'); a.href = cv.toDataURL('image/png'); a.download = 'my-photoshop-edit.png'; a.click(); toast('💾 Downloaded!'); },
+    sample: () => { pushUndo(); loadSample(); toast('Sample image loaded', 'image'); },
+    save: () => { const a = document.createElement('a'); a.href = cv.toDataURL('image/png'); a.download = 'my-photoshop-edit.png'; a.click(); toast('Downloaded!', 'download'); },
     fillfg: () => { pushUndo(); applyProcessed(c => { c.fillStyle = S.fg; c.fillRect(0, 0, W(), H()); }); },
-    clear: () => { if (!hasSel) return toast('Make a selection first'); pushUndo(); ctx.save(); ctx.globalCompositeOperation = 'destination-out'; ctx.drawImage(selC, 0, 0); ctx.restore(); },
+    clear: () => { if (!hasSel) return toast('Make a selection first', 'marquee'); pushUndo(); ctx.save(); ctx.globalCompositeOperation = 'destination-out'; ctx.drawImage(selC, 0, 0); ctx.restore(); },
     rotcw: () => rotate(90), rotccw: () => rotate(-90), rot180: () => rotate(180),
     fliph: () => flip(true), flipv: () => flip(false),
     all: () => { selCommit(c => c.fillRect(0, 0, W(), H()), 'new'); },
@@ -627,9 +627,9 @@
     swap: () => { [S.fg, S.bg] = [S.bg, S.fg]; paintSwatches(); },
     resetcol: () => { S.fg = '#000000'; S.bg = '#ffffff'; paintSwatches(); },
     cropApply, cropCancel: () => { cropBox = null; drawOverlay(); },
-    pickSource: () => { newSource = true; buildOptions(); toast('Now click the area to copy FROM'); }
+    pickSource: () => { newSource = true; buildOptions(); toast('Now click the area to copy FROM', 'target'); }
   };
-  Object.keys(FILTERS).forEach(k => CMDS[k] = () => { pushUndo(); applyProcessed(FILTERS[k], { replace: true }); toast('✨ Filter applied' + (hasSel ? ' to selection' : '')); });
+  Object.keys(FILTERS).forEach(k => CMDS[k] = () => { pushUndo(); applyProcessed(FILTERS[k], { replace: true }); toast('Filter applied' + (hasSel ? ' to selection' : ''), 'filters'); });
 
   function rotate(deg) {
     pushUndo(); const src = copyCanvas(), w = W(), h = H();
@@ -655,7 +655,7 @@
       const img = new Image();
       img.onload = () => {
         const s = Math.min(1, 1200 / img.width, 800 / img.height), w = Math.round(img.width * s), h = Math.round(img.height * s);
-        pushUndo(); resizeAll(w, h); ctx.drawImage(img, 0, 0, w, h); toast('📂 Image opened');
+        pushUndo(); resizeAll(w, h); ctx.drawImage(img, 0, 0, w, h); toast('Image opened', 'folder');
       };
       img.src = r.result;
     };
@@ -683,7 +683,7 @@
   function resetAdjSliders() { ADJ.forEach(a => { $('a-' + a.id).value = a.def; $(`a-${a.id}-v`).textContent = a.def + (a.u === 'deg' ? '°' : '%'); }); }
   function commitAdj() { if (adjBase) { adjBase = null; resetAdjSliders(); } }
   function cancelAdj() { if (adjBase) { restore(adjBase); undoStack.pop(); adjBase = null; resetAdjSliders(); } }
-  $('adj-apply').onclick = () => { if (adjBase) { commitAdj(); toast('✓ Adjustment applied'); } };
+  $('adj-apply').onclick = () => { if (adjBase) { commitAdj(); toast('Adjustment applied', 'check'); } };
   $('adj-cancel').onclick = () => { cancelAdj(); };
 
   // colour swatches
@@ -708,7 +708,7 @@
     if (k === 'escape') { finishPoly(false); cropBox = null; drawOverlay(); return; }
     if (k === 'delete' || k === 'backspace') { if (poly && poly.pts.length > 1) { poly.pts.pop(); drawOverlay(); } else if (hasSel) CMDS.clear(); e.preventDefault(); return; }
     if (k === '[' || k === ']') { S.size = Math.max(1, Math.min(200, S.size + (k === ']' ? 5 : -5))); buildOptions(); drawOverlay(); return; }
-    if (/^[0-9]$/.test(k)) { S.op = k === '0' ? 100 : +k * 10; buildOptions(); toast('Opacity ' + S.op + '%'); return; }
+    if (/^[0-9]$/.test(k)) { S.op = k === '0' ? 100 : +k * 10; buildOptions(); toast('Opacity ' + S.op + '%', 'opacity'); return; }
     if (k === 'x') return CMDS.swap();
     if (k === 'd') return CMDS.resetcol();
     const keys = { v: 'move', m: 'marquee', l: 'lasso', w: 'wand', c: 'crop', i: 'eyedropper', e: 'eraser', s: 'clone', j: 'heal', o: 'dodge', t: 'text', u: 'shape', z: 'zoom' };
@@ -718,25 +718,25 @@
   });
 
   const CHALLENGES = [
-    { id: 'c1', text: '🧬 Remove the boat using the Clone Stamp.' },
-    { id: 'c2', text: '🩹 Remove the two birds with the Spot Healing Brush.' },
-    { id: 'c3', text: '🪄 Select the sun with the Magic Wand and turn it pink using Hue.' },
-    { id: 'c4', text: '⛶ Crop the image to a 1:1 square using the rule of thirds.' },
-    { id: 'c5', text: '➰ Use the Lasso to select the mountains and make them black & white.' },
-    { id: 'c6', text: '🌈 Select the sky and add a new gradient to it.' },
-    { id: 'c7', text: '🅃 Add a title to make it into a postcard.' },
-    { id: 'c8', text: '📂 Open your own photo and apply a filter to one part only.' }
+    { id: 'c1', icon: 'clone', text: 'Remove the boat using the Clone Stamp.' },
+    { id: 'c2', icon: 'heal', text: 'Remove the two birds with the Spot Healing Brush.' },
+    { id: 'c3', icon: 'wand', text: 'Select the sun with the Magic Wand and turn it pink using Hue.' },
+    { id: 'c4', icon: 'crop', text: 'Crop the image to a 1:1 square using the rule of thirds.' },
+    { id: 'c5', icon: 'lasso', text: 'Use the Lasso to select the mountains and make them black & white.' },
+    { id: 'c6', icon: 'gradient', text: 'Select the sky and add a new gradient to it.' },
+    { id: 'c7', icon: 'text', text: 'Add a title to make it into a postcard.' },
+    { id: 'c8', icon: 'folder', text: 'Open your own photo and apply a filter to one part only.' }
   ];
   const getCh = () => { try { return JSON.parse(localStorage.getItem('psChallenges') || '[]'); } catch { return []; } };
   function renderChallenges() {
     const done = getCh();
     $('challenges').innerHTML = CHALLENGES.map(c => `<label class="challenge ${done.includes(c.id) ? 'done' : ''}">
-      <input type="checkbox" data-c="${c.id}" ${done.includes(c.id) ? 'checked' : ''}><span>${c.text}</span></label>`).join('') +
+      <input type="checkbox" data-c="${c.id}" ${done.includes(c.id) ? 'checked' : ''}><span>${ic(c.icon)} ${c.text}</span></label>`).join('') +
       `<p class="muted" style="font-size:.85rem;margin-top:8px">${done.length} / ${CHALLENGES.length} complete</p>`;
     $('challenges').querySelectorAll('input').forEach(i => i.onchange = () => {
       const set = new Set(getCh()); i.checked ? set.add(i.dataset.c) : set.delete(i.dataset.c);
       try { localStorage.setItem('psChallenges', JSON.stringify([...set])); } catch {}
-      if (i.checked) { toast('🏆 Challenge complete!'); if (set.size === CHALLENGES.length) confetti(150); else confetti(25); }
+      if (i.checked) { toast('Challenge complete!', 'trophy'); if (set.size === CHALLENGES.length) confetti(150); else confetti(25); }
       renderChallenges();
     });
   }

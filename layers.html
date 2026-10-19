@@ -5,13 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Layers · Photoshop Skills Lab</title>
   <link rel="stylesheet" href="css/style.css">
+  <style>.sw{display:inline-block;width:14px;height:14px;border:1px solid #888;border-radius:3px;vertical-align:-2px}.flip-down{transform:rotate(180deg)}.layer-row .eye{color:var(--text);font-size:1.15rem}</style>
 </head>
 <body>
 
   <header class="page-hero">
     <div class="blob b1"></div><div class="blob b2"></div>
     <div class="container">
-      <span class="emoji">📚</span>
+      <span class="emoji"><i data-i="layers"></i></span>
       <h1>Understanding <span class="grad-text">Layers</span></h1>
       <p class="muted" style="max-width:660px;margin:0 auto">Layers are like clear sheets of plastic stacked on top of each other. What’s on a top layer covers what’s underneath.</p>
     </div>
@@ -21,14 +22,14 @@
   <section class="container" style="padding-top:10px">
     <div class="section-title reveal">
       <h2>Try the Layers panel</h2>
-      <p>Click 👁️ to hide/show. Click a layer to select it, then <strong>drag it on the picture</strong> to move it. Use ▲▼ to change the order and try the opacity and blend mode.</p>
+      <p>Click the eye <i data-i="eye"></i> to hide/show. Click a layer to select it, then <strong>drag it on the picture</strong> to move it. Use the up and down arrow buttons to change the order and try the opacity and blend mode.</p>
     </div>
     <div class="demo reveal">
       <div class="demo-grid">
         <div class="layer-stage" id="lstage"></div>
         <div>
           <div class="layers-panel">
-            <div class="lp-head"><span>Layers</span><span class="muted" style="font-weight:500">⬆ top of stack</span></div>
+            <div class="lp-head"><span>Layers</span><span class="muted" style="font-weight:500">top of stack ↑</span></div>
             <div id="lp-list"></div>
             <div class="lp-controls">
               <label style="display:block;font-weight:600">Opacity <span id="lp-op-v" style="float:right;color:var(--accent)">100%</span></label>
@@ -40,9 +41,9 @@
                 <option value="color">Colour</option><option value="luminosity">Luminosity</option>
               </select>
               <div class="btn-row">
-                <button class="btn btn-small" id="lp-up" data-tip="Move layer up">▲</button>
-                <button class="btn btn-small" id="lp-down" data-tip="Move layer down">▼</button>
-                <button class="btn btn-small" id="lp-reset">Reset</button>
+                <button class="btn btn-small" id="lp-up" data-tip="Move layer up"><i data-i="arrow-up"></i></button>
+                <button class="btn btn-small" id="lp-down" data-tip="Move layer down"><i data-i="arrow-up" class="flip-down"></i></button>
+                <button class="btn btn-small" id="lp-reset"><i data-i="refresh"></i> Reset</button>
               </div>
             </div>
           </div>
@@ -56,12 +57,12 @@
   <section class="container">
     <div class="section-title reveal"><h2>Layer basics</h2></div>
     <div class="grid">
-      <div class="card reveal"><div class="icon">➕</div><h3>New layer</h3><p>Click the <strong>+</strong> square at the bottom of the Layers panel, or <kbd>Shift</kbd>+<kbd>Ctrl</kbd>+<kbd>N</kbd>.</p></div>
-      <div class="card reveal"><div class="icon">📄</div><h3>Duplicate</h3><p><kbd>Ctrl</kbd>+<kbd>J</kbd> copies the layer – always duplicate before a big edit!</p></div>
-      <div class="card reveal"><div class="icon">✏️</div><h3>Rename</h3><p>Double-click the layer’s <strong>name</strong>. Good names = organised work (and better marks!).</p></div>
-      <div class="card reveal"><div class="icon">🔒</div><h3>Lock</h3><p>The padlock stops you changing a layer by accident. The Background layer starts locked.</p></div>
-      <div class="card reveal"><div class="icon">📁</div><h3>Groups</h3><p>Select several layers and press <kbd>Ctrl</kbd>+<kbd>G</kbd> to put them in a folder.</p></div>
-      <div class="card reveal"><div class="icon">🗑️</div><h3>Delete</h3><p>Drag the layer to the bin icon, or select it and press <kbd>Delete</kbd>.</p></div>
+      <div class="card reveal"><div class="icon"><i data-i="plus"></i></div><h3>New layer</h3><p>Click the <strong>+</strong> square at the bottom of the Layers panel, or <kbd>Shift</kbd>+<kbd>Ctrl</kbd>+<kbd>N</kbd>.</p></div>
+      <div class="card reveal"><div class="icon"><i data-i="copy"></i></div><h3>Duplicate</h3><p><kbd>Ctrl</kbd>+<kbd>J</kbd> copies the layer – always duplicate before a big edit!</p></div>
+      <div class="card reveal"><div class="icon"><i data-i="rename"></i></div><h3>Rename</h3><p>Double-click the layer’s <strong>name</strong>. Good names = organised work (and better marks!).</p></div>
+      <div class="card reveal"><div class="icon"><i data-i="lock"></i></div><h3>Lock</h3><p>The padlock stops you changing a layer by accident. The Background layer starts locked.</p></div>
+      <div class="card reveal"><div class="icon"><i data-i="folder"></i></div><h3>Groups</h3><p>Select several layers and press <kbd>Ctrl</kbd>+<kbd>G</kbd> to put them in a folder.</p></div>
+      <div class="card reveal"><div class="icon"><i data-i="trash"></i></div><h3>Delete</h3><p>Drag the layer to the bin icon, or select it and press <kbd>Delete</kbd>.</p></div>
     </div>
   </section>
 
@@ -69,24 +70,24 @@
   <section class="container">
     <div class="demo-grid">
       <div class="reveal">
-        <h2>🎭 Layer masks</h2>
+        <h2><span class="section-icon"><i data-i="mask"></i> Layer masks</span></h2>
         <p>A mask hides parts of a layer <strong>without deleting them</strong>. It’s a much better choice than the Eraser because you can always undo it.</p>
-        <div class="box info" style="font-size:1.1rem"><strong>Remember:</strong>⬛ <strong>Black conceals</strong> (hides) &nbsp;·&nbsp; ⬜ <strong>White reveals</strong> (shows)</div>
+        <div class="box info" style="font-size:1.1rem"><strong><i data-i="info"></i> Remember:</strong><span class="sw" style="background:#000"></span> <strong>Black conceals</strong> (hides) &nbsp;·&nbsp; <span class="sw" style="background:#fff"></span> <strong>White reveals</strong> (shows)</div>
         <ol>
           <li>Select the layer.</li>
-          <li>Click the <strong>Add Layer Mask</strong> button (rectangle with a circle) at the bottom of the Layers panel.</li>
+          <li>Click the <strong>Add Layer Mask</strong> button (rectangle with a circle in it) at the bottom of the Layers panel.</li>
           <li>Pick the Brush (<kbd>B</kbd>) and paint with <strong>black</strong> to hide.</li>
           <li>Made a mistake? Press <kbd>X</kbd> to swap to <strong>white</strong> and paint it back.</li>
         </ol>
-        <p><strong>Try it →</strong> the top layer is full colour, the bottom layer is black &amp; white. Paint on the image to hide parts of the colour layer.</p>
+        <p><strong>Try it:</strong> the top layer is full colour, the bottom layer is black &amp; white. Paint on the image to hide parts of the colour layer.</p>
         <div class="l2"><strong>Grey</strong> on a mask partly hides – use a soft brush at low opacity, or a black-to-white gradient, for smooth blends between images. <kbd>Alt</kbd>+click the mask thumbnail to view the mask itself. <kbd>Shift</kbd>+click it to switch it off temporarily.</div>
       </div>
       <div class="demo reveal">
         <div class="canvas-wrap"><canvas id="mask-cv" width="800" height="500" style="touch-action:none;cursor:crosshair"></canvas></div>
         <div class="btn-row">
-          <button class="btn btn-small is-on" id="m-black">⬛ Paint black (hide)</button>
-          <button class="btn btn-small" id="m-white">⬜ Paint white (show)</button>
-          <button class="btn btn-small" id="m-reset">Reset mask</button>
+          <button class="btn btn-small is-on" id="m-black"><span class="sw" style="background:#000"></span> Paint black (hide)</button>
+          <button class="btn btn-small" id="m-white"><span class="sw" style="background:#fff"></span> Paint white (show)</button>
+          <button class="btn btn-small" id="m-reset"><i data-i="refresh"></i> Reset mask</button>
         </div>
         <label style="display:block;font-weight:600;margin-top:12px;font-size:.92rem">Brush size</label>
         <input type="range" id="m-size" min="10" max="150" value="60">
@@ -100,12 +101,12 @@
   <section class="container">
     <div class="section-title reveal"><h2>Types of layer</h2><p>Hover the cards to flip them.</p></div>
     <div class="grid">
-      <div class="flip reveal" onclick="this.classList.toggle('flipped')"><div class="flip-inner"><div class="flip-face flip-front"><div class="icon">🟫</div><h3>Pixel layer</h3></div><div class="flip-face flip-back">A normal layer made of pixels – photos, brush strokes. You can paint and erase on it.</div></div></div>
-      <div class="flip reveal" onclick="this.classList.toggle('flipped')"><div class="flip-inner"><div class="flip-face flip-front"><div class="icon">🅃</div><h3>Type layer</h3></div><div class="flip-face flip-back">Created by the Type tool. Shows a “T” thumbnail. The text stays editable.</div></div></div>
-      <div class="flip reveal" onclick="this.classList.toggle('flipped')"><div class="flip-inner"><div class="flip-face flip-front"><div class="icon">⬟</div><h3>Shape layer</h3></div><div class="flip-face flip-back">Vector shapes from the Shape or Pen tool. Stays sharp at any size; change colour by double-clicking the thumbnail.</div></div></div>
-      <div class="flip reveal" onclick="this.classList.toggle('flipped')"><div class="flip-inner"><div class="flip-face flip-front"><div class="icon">◐</div><h3>Adjustment layer</h3></div><div class="flip-face flip-back">Changes colour/light of everything <strong>below</strong> it, without changing those layers. Re-edit any time.</div></div></div>
-      <div class="flip reveal" onclick="this.classList.toggle('flipped')"><div class="flip-inner"><div class="flip-face flip-front"><div class="icon">📦</div><h3>Smart Object</h3></div><div class="flip-face flip-back">A protected container. Resize without losing quality and use Smart Filters that can be edited later.</div></div></div>
-      <div class="flip reveal" onclick="this.classList.toggle('flipped')"><div class="flip-inner"><div class="flip-face flip-front"><div class="icon">📎</div><h3>Clipping mask</h3></div><div class="flip-face flip-back"><kbd>Alt</kbd>+click between two layers – the top layer only shows inside the shape of the layer below. Great for putting a photo inside text!</div></div></div>
+      <div class="flip reveal" onclick="this.classList.toggle('flipped')"><div class="flip-inner"><div class="flip-face flip-front"><div class="icon"><i data-i="image"></i></div><h3>Pixel layer</h3></div><div class="flip-face flip-back">A normal layer made of pixels – photos, brush strokes. You can paint and erase on it.</div></div></div>
+      <div class="flip reveal" onclick="this.classList.toggle('flipped')"><div class="flip-inner"><div class="flip-face flip-front"><div class="icon"><i data-i="text"></i></div><h3>Type layer</h3></div><div class="flip-face flip-back">Created by the Type tool. Shows a “T” thumbnail. The text stays editable.</div></div></div>
+      <div class="flip reveal" onclick="this.classList.toggle('flipped')"><div class="flip-inner"><div class="flip-face flip-front"><div class="icon"><i data-i="shape"></i></div><h3>Shape layer</h3></div><div class="flip-face flip-back">Vector shapes from the Shape or Pen tool. Stays sharp at any size; change colour by double-clicking the thumbnail.</div></div></div>
+      <div class="flip reveal" onclick="this.classList.toggle('flipped')"><div class="flip-inner"><div class="flip-face flip-front"><div class="icon"><i data-i="circle-half"></i></div><h3>Adjustment layer</h3></div><div class="flip-face flip-back">Changes colour/light of everything <strong>below</strong> it, without changing those layers. Re-edit any time.</div></div></div>
+      <div class="flip reveal" onclick="this.classList.toggle('flipped')"><div class="flip-inner"><div class="flip-face flip-front"><div class="icon"><i data-i="box"></i></div><h3>Smart Object</h3></div><div class="flip-face flip-back">A protected container. Resize without losing quality and use Smart Filters that can be edited later.</div></div></div>
+      <div class="flip reveal" onclick="this.classList.toggle('flipped')"><div class="flip-inner"><div class="flip-face flip-front"><div class="icon"><i data-i="paperclip"></i></div><h3>Clipping mask</h3></div><div class="flip-face flip-back"><kbd>Alt</kbd>+click between two layers – the top layer only shows inside the shape of the layer below. Great for putting a photo inside text!</div></div></div>
     </div>
 
     <div class="l2" style="margin-top:30px">
@@ -115,6 +116,7 @@
     <div style="text-align:center;margin-top:30px"><button class="btn learn-btn" data-id="layers">Mark as learnt</button></div>
   </section>
 
+  <script src="js/icons.js"></script>
   <script src="js/main.js"></script>
   <script>
     const $ = id => document.getElementById(id);
@@ -147,18 +149,18 @@
       });
       $('lp-list').innerHTML = layers.map((l, i) => `
         <div class="layer-row ${i === sel ? 'sel' : ''} ${l.vis ? '' : 'hidden-layer'}" data-i="${i}">
-          <button class="eye" data-i="${i}" aria-label="Toggle visibility">${l.vis ? '👁️' : '—'}</button>
+          <button class="eye" data-i="${i}" aria-label="Toggle visibility">${ic(l.vis ? 'eye' : 'eye-off')}</button>
           <div class="thumb" style="background:${l.thumb}"></div>
           <span class="name">${l.name}</span>
         </div>`).join('');
       $('lp-op').value = layers[sel].op; $('lp-op-v').textContent = layers[sel].op + '%';
       $('lp-blend').value = layers[sel].blend;
-      $('lp-tip').innerHTML = '<strong>💡 ' + layers[sel].name + '</strong>' + layers[sel].tip;
+      $('lp-tip').innerHTML = '<strong>' + ic('bulb') + ' ' + layers[sel].name + '</strong>' + layers[sel].tip;
       document.querySelectorAll('.layer-row').forEach(r => r.onclick = () => { sel = +r.dataset.i; renderLayers(); });
       document.querySelectorAll('.eye').forEach(b => b.onclick = e => { e.stopPropagation(); layers[b.dataset.i].vis = !layers[b.dataset.i].vis; renderLayers(); });
     }
     $('lp-op').oninput = e => { layers[sel].op = +e.target.value; renderLayers(); };
-    $('lp-blend').onchange = e => { layers[sel].blend = e.target.value; renderLayers(); toast('Blend mode: ' + e.target.selectedOptions[0].text); };
+    $('lp-blend').onchange = e => { layers[sel].blend = e.target.value; renderLayers(); toast('Blend mode: ' + e.target.selectedOptions[0].text, 'layers'); };
     $('lp-up').onclick = () => { if (sel > 0) { [layers[sel - 1], layers[sel]] = [layers[sel], layers[sel - 1]]; sel--; renderLayers(); } };
     $('lp-down').onclick = () => { if (sel < layers.length - 1) { [layers[sel + 1], layers[sel]] = [layers[sel], layers[sel + 1]]; sel++; renderLayers(); } };
     $('lp-reset').onclick = () => { layers = START(); sel = 2; renderLayers(); };
@@ -167,7 +169,7 @@
     let dragL = null;
     $('lstage').addEventListener('pointerdown', e => {
       const l = layers[sel];
-      if (l.name.startsWith('Background')) { toast('🔒 The Background layer is locked – pick another layer'); return; }
+      if (l.name.startsWith('Background')) { toast('The Background layer is locked – pick another layer', 'lock'); return; }
       dragL = { sx: e.clientX, sy: e.clientY, x: l.x, y: l.y };
       $('lstage').setPointerCapture(e.pointerId);
     });

@@ -1,5 +1,6 @@
 /* ============================================================
    PHOTOSHOP SKILLS LAB – shared JavaScript (used on every page)
+   Needs js/icons.js to be loaded first.
    ============================================================ */
 
 /* ---------- 1. Navigation bar (built once, used on every page) ---------- */
@@ -10,8 +11,8 @@ const PAGES = [
   { href: 'editing.html',    label: 'Image Editing' },
   { href: 'layers.html',     label: 'Layers' },
   { href: 'filters.html',    label: 'Filters' },
-  { href: 'playground.html', label: '🎨 Playground' },
-  { href: 'quiz.html',       label: 'Quiz' }
+  { href: 'playground.html', label: 'Playground', icon: 'palette' },
+  { href: 'quiz.html',       label: 'Quiz', icon: 'trophy' }
 ];
 
 function buildNav() {
@@ -21,14 +22,10 @@ function buildNav() {
   nav.innerHTML = `
     <div class="container nav-inner">
       <a class="logo" href="index.html"><span class="logo-mark">Ps</span> Skills Lab</a>
-      <button class="burger" aria-label="Menu">☰</button>
+      <button class="burger" aria-label="Menu">${ic('menu')}</button>
       <ul class="nav-links">
-        ${PAGES.map(p => `<li><a href="${p.href}" class="${p.href === here ? 'active' : ''}">${p.label}</a></li>`).join('')}
+        ${PAGES.map(p => `<li><a href="${p.href}" class="${p.href === here ? 'active' : ''}">${p.icon ? ic(p.icon) + ' ' : ''}${p.label}</a></li>`).join('')}
       </ul>
-      <div class="level-switch" data-tip="Choose your course level">
-        <button data-level="1">Level 1</button>
-        <button data-level="2">Level 2</button>
-      </div>
     </div>`;
   document.body.prepend(nav);
 
@@ -41,31 +38,15 @@ function buildNav() {
   // footer + back-to-top button
   const footer = document.createElement('footer');
   footer.className = 'site-footer';
-  footer.innerHTML = `<div class="container">Photoshop Skills Lab · UAL Level 1 &amp; Level 2 Digital · Practise here, then try it for real in Photoshop!</div>`;
+  footer.innerHTML = `<div class="container">Photoshop Skills Lab · Practise here, then try it for real in Photoshop! · Icons: Material Design Icons (Pictogrammers)</div>`;
   document.body.appendChild(footer);
   const top = document.createElement('button');
-  top.id = 'to-top'; top.textContent = '↑'; top.setAttribute('aria-label', 'Back to top');
+  top.id = 'to-top'; top.innerHTML = ic('arrow-up'); top.setAttribute('aria-label', 'Back to top');
   top.onclick = () => scrollTo({ top: 0 });
   document.body.appendChild(top);
 }
 
-/* ---------- 2. Level 1 / Level 2 switch (remembered between pages) ---------- */
-function getLevel() { try { return localStorage.getItem('psLevel') || '2'; } catch { return '2'; } }
-function setLevel(l) {
-  document.body.dataset.level = l;
-  document.querySelectorAll('.level-switch button').forEach(b => b.classList.toggle('on', b.dataset.level === l));
-  try { localStorage.setItem('psLevel', l); } catch {}
-}
-function initLevel() {
-  setLevel(getLevel());
-  document.querySelectorAll('.level-switch button').forEach(b =>
-    b.addEventListener('click', () => {
-      setLevel(b.dataset.level);
-      toast(b.dataset.level === '1' ? '📘 Level 1 mode – the essentials' : '⭐ Level 2 mode – extra detail switched on');
-    }));
-}
-
-/* ---------- 3. Scroll effects ---------- */
+/* ---------- 2. Scroll effects ---------- */
 function initScroll() {
   const bar = document.getElementById('scroll-progress');
   const top = document.getElementById('to-top');
@@ -80,7 +61,7 @@ function initScroll() {
   document.querySelectorAll('.reveal').forEach(el => io.observe(el));
 }
 
-/* ---------- 4. Glow that follows the mouse on cards ---------- */
+/* ---------- 3. Glow that follows the mouse on cards ---------- */
 function initCardGlow() {
   document.addEventListener('pointermove', e => {
     const card = e.target.closest('.card');
@@ -91,19 +72,21 @@ function initCardGlow() {
   });
 }
 
-/* ---------- 5. Toast message ---------- */
-function toast(msg) {
+/* ---------- 4. Toast message ----------
+   toast('Saved!', 'check')  – the second part is an optional icon name   */
+function toast(msg, icon = 'info') {
   let t = document.querySelector('.toast');
   if (!t) { t = document.createElement('div'); t.className = 'toast'; document.body.appendChild(t); }
-  t.textContent = msg;
+  t.innerHTML = ic(icon) + '<span></span>';
+  t.querySelector('span').textContent = msg;
   t.classList.add('show');
   clearTimeout(t._timer);
   t._timer = setTimeout(() => t.classList.remove('show'), 2600);
 }
 
-/* ---------- 6. Pop-up (modal) ----------
-   openModal({ icon, title, html })                                       */
-function openModal({ icon = '💡', title = '', html = '' }) {
+/* ---------- 5. Pop-up (modal) ----------
+   openModal({ icon: 'brush', title: 'Brush', html: '<p>...</p>' })       */
+function openModal({ icon = 'bulb', title = '', html = '' }) {
   let d = document.getElementById('modal');
   if (!d) {
     d = document.createElement('dialog');
@@ -112,14 +95,14 @@ function openModal({ icon = '💡', title = '', html = '' }) {
     d.addEventListener('click', e => { if (e.target === d) d.close(); }); // click outside to close
   }
   d.innerHTML = `
-    <div class="modal-head"><span class="big">${icon}</span><h2>${title}</h2>
-      <button class="modal-close" aria-label="Close">✕</button></div>
+    <div class="modal-head"><span class="big">${ic(icon)}</span><h2>${title}</h2>
+      <button class="modal-close" aria-label="Close">${ic('close')}</button></div>
     <div class="modal-body">${html}</div>`;
   d.querySelector('.modal-close').onclick = () => d.close();
   d.showModal();
 }
 
-/* ---------- 7. "Mark as learnt" progress (saved in the browser) ---------- */
+/* ---------- 6. "Mark as learnt" progress (saved in the browser) ---------- */
 function getDone() { try { return JSON.parse(localStorage.getItem('psDone') || '[]'); } catch { return []; } }
 function markDone(id) {
   const done = new Set(getDone());
@@ -131,16 +114,16 @@ function initLearnButtons() {
   const done = getDone();
   document.querySelectorAll('.learn-btn').forEach(btn => {
     const id = btn.dataset.id;
-    const paint = on => { btn.classList.toggle('done', on); btn.textContent = on ? '✓ I’ve learnt this' : 'Mark as learnt'; };
+    const paint = on => { btn.classList.toggle('done', on); btn.innerHTML = on ? ic('check-circle') + ' I’ve learnt this' : ic('check') + ' Mark as learnt'; };
     paint(done.includes(id));
     btn.addEventListener('click', () => {
       const on = markDone(id); paint(on);
-      if (on) { toast('Nice work! Progress saved ✅'); confetti(30); }
+      if (on) { toast('Nice work! Progress saved', 'check-circle'); confetti(30); }
     });
   });
 }
 
-/* ---------- 8. Confetti celebration ---------- */
+/* ---------- 7. Confetti celebration ---------- */
 function confetti(n = 80) {
   const colours = ['#31a8ff', '#a855f7', '#ff4d8d', '#22c55e', '#facc15'];
   for (let i = 0; i < n; i++) {
@@ -155,7 +138,7 @@ function confetti(n = 80) {
   }
 }
 
-/* ---------- 9. Before/after sliders (any .compare element) ---------- */
+/* ---------- 8. Before/after sliders (any .compare element) ---------- */
 function initCompare() {
   document.querySelectorAll('.compare').forEach(box => {
     const range = box.querySelector('input');
@@ -172,7 +155,6 @@ function initCompare() {
 /* ---------- start everything ---------- */
 document.addEventListener('DOMContentLoaded', () => {
   buildNav();
-  initLevel();
   initScroll();
   initCardGlow();
   initLearnButtons();
